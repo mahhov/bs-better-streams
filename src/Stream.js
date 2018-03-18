@@ -6,14 +6,16 @@ class Stream {
     }
 
     each(handler) {
-        this.value.forEach(handler)
+        this.value.forEach(handler);
+        return this;
     }
 
     map(handler) {
-        this.value = this.value.map(handler)
+        return new Stream(this.value.map(handler));
     }
 
     filter(handler) {
+        return new Stream(this.value.filter(handler));
     }
 
     //
