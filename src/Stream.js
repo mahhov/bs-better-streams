@@ -22,13 +22,12 @@ class Stream {
         return this.map(elem => elem[name]);
     }
 
-    //
-    // set(field, func) {
-    //     return this.each((elem, ...args) => {
-    //         elem[field] = func(elem, ...args);
-    //     });
-    // }
-    //
+    set(field, handler) {
+        return this.each((elem, ...args) => {
+            elem[field] = handler(elem, ...args);
+        });
+    }
+
     // repeat(count) {
     //     return this.map(elem => _.times(count, () => elem));
     // }

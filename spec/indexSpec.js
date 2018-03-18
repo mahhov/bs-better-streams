@@ -1,39 +1,8 @@
 // const b_ = require('../src/index.js');
 //
 // describe('b_', () => {
-//     describe('basic methods', () => {
-//         it('#each', () => {
-//             let handler = jasmine.createSpy('handler');
-//             b_([1, 2, 3]).each(handler);
-//             expect(handler).toHaveBeenCalledTimes(3);
-//             expect(handler).toHaveBeenCalledWith(1, 0, [1, 2, 3]);
-//             expect(handler).toHaveBeenCalledWith(2, 1, [1, 2, 3]);
-//             expect(handler).toHaveBeenCalledWith(3, 2, [1, 2, 3]);
-//         });
-//
-//     });
-//
 //     describe('additional methods', () => {
-//         describe('#set', () => {
-//             it('#set', function () {
-//                 b_.addPrototype();
-//                 let times = [{start: 1}, {start: 5}];
-//                 times.set('end', (elem, index) => elem.start + index + 1);
-//                 expect(times).toEqual([{start: 1, end: 2}, {start: 5, end: 7}]);
-//             });
-//
-//             it('should set the property on all elements', () => {
-//                 let list = b_([{}, {}, {}]);
-//                 list.set('key', () => 'value');
-//                 expect(list.value).toEqual([{key: 'value'}, {key: 'value'}, {key: 'value'}]);
-//             });
-//
-//             it('should pass in element, index, and entire array as arguments to handler function', () => {
-//                 let list = b_([{value: 4}, {value: 6}, {value: 8}]);
-//                 list.set('sum', (elem, index, array) => elem.value + index + array.length);
-//                 expect(list.value).toEqual([{value: 4, sum: 7}, {value: 6, sum: 10}, {value: 8, sum: 13}]);
-//             });
-//         });
+//      
 //
 //         describe('#repeat', () => {
 //             it('should replace each element with a list containing that element repeated `n` times', () => {
