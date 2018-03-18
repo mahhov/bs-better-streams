@@ -18,6 +18,10 @@ class Stream {
         return new Stream(this.value.filter(handler));
     }
 
+    pluck(name) {
+        return this.map(elem => elem[name]);
+    }
+
     //
     // set(field, func) {
     //     return this.each((elem, ...args) => {

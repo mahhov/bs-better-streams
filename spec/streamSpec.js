@@ -48,4 +48,11 @@ describe('stream basic methods', () => {
         stream.value[0] = 5;
         expect(result.value[0]).toEqual(1);
     });
+
+    it('pluck', () => {
+        let stream = st([{v: 1}, {v: 2}, {v: 3}]);
+        let result = stream.pluck('v');
+        expect(stream.value).toEqual([{v: 1}, {v: 2}, {v: 3}]);
+        expect(result.value).toEqual([1, 2, 3]);
+    });
 });
