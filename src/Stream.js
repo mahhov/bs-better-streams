@@ -28,16 +28,17 @@ class Stream {
         });
     }
 
-    // repeat(count) {
-    //     return this.map(elem => _.times(count, () => elem));
-    // }
-    //
-    // field(name) {
-    //     return new B_(this.value[name]);
-    // }
-    //
-    // asList(func) {
-    //     return func(this.value);
+    repeat(count) {
+        let repeated = [];
+        this.each(elem => {
+            for (let i = 0; i < count; i++)
+                repeated.push(elem)
+        });
+        return new Stream(repeated);
+    }
+
+    // asList(handler) {
+    //     return handler(this.value);
     // }
     //
     // if(predicate) {
