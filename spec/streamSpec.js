@@ -20,4 +20,14 @@ describe('stream basic methods', () => {
         expect(handler).toHaveBeenCalledWith(3, 2, [1, 2, 3]);
         expect(stream.value).toEqual([1, 2, 3]);
     });
+
+    it('#map', function () {
+        let handler = jasmine.createSpy('handler').and.callFake(x => x * 2);
+        stream.map(handler);
+        expect(handler).toHaveBeenCalledTimes(3);
+        expect(handler).toHaveBeenCalledWith(1, 0, [1, 2, 3]);
+        expect(handler).toHaveBeenCalledWith(2, 1, [1, 2, 3]);
+        expect(handler).toHaveBeenCalledWith(3, 2, [1, 2, 3]);
+        expect(stream.value).toEqual([2, 4, 6]);
+    });
 });

@@ -10,6 +10,7 @@ class Stream {
     }
 
     map(handler) {
+        this.value = this.value.map(handler)
     }
 
     filter(handler) {
