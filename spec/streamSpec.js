@@ -73,7 +73,11 @@ describe('stream basic methods', () => {
         expect(result.value).toEqual([{v: 0}, {v: 0}, {v: 0}, {v: 2}, {v: 2}, {v: 2}, {v: 3}, {v: 3}, {v: 3}]);
     });
 
-    // it('#', function() {
-    //    
-    // });
+    it('#asList', function () {
+        let handler = jasmine.createSpy('handler').and.returnValue(5);
+        let result = stream.asList(handler);
+        expect(handler).toHaveBeenCalledWith([1, 2, 3]);
+        expect(result.value).toEqual(5);
+        expect(stream.value).toEqual([1, 2, 3]);
+    });
 });

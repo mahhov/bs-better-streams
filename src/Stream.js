@@ -37,10 +37,10 @@ class Stream {
         return new Stream(repeated);
     }
 
-    // asList(handler) {
-    //     return handler(this.value);
-    // }
-    //
+    asList(handler) {
+        return new Stream(handler(this.value));
+    }
+
     // if(predicate) {
     //     return new B_If(this, predicate);
     // }
