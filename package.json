@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "test": "jasmine"
+    "test": "jasmine",
+    "dev": "nodemon --watch src --watch examples/xperimental.js --exec node examples/xperimental.js",
+    "postversion": "git push && git push --tags && npm publish"
   },
   "author": "mahhov",
   "license": "ISC",
@@ -13,6 +15,7 @@
     "url": "https://github.com/mahhov/bs-better-stream"
   },
   "devDependencies": {
-    "jasmine": "^3.1.0"
+    "jasmine": "^3.1.0",
+    "nodemon": "^1.17.2"
   }
 }
