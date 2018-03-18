@@ -1,13 +1,13 @@
 const st = require('../src/index.js');
 
-describe('if', () => {
+describe('branching', () => {
     let stream;
 
     beforeEach(() => {
         stream = st([1, 2, 3, 4, 5, 6])
     });
 
-    it('#if #then #else #done', function () {
+    it('#if #then #else #done', () => {
         let result = st([1, 2, 3, 4, 5, 6])
             .if(num => num > 2)
             .then(stream => stream
@@ -19,7 +19,7 @@ describe('if', () => {
         expect(result.value).toEqual([40, 50, 60, 70, 60, 70]);
     });
 
-    it('#if #then #else #elseIf #done', function () {
+    it('#if #then #else #elseIf #done', () => {
         let result = st([1, 2, 3, 4, 5, 6])
             .if(num => num < 2)
             .then(stream => stream

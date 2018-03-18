@@ -3,6 +3,10 @@ class Stream {
         this.value = value;
     }
 
+    union(stream) {
+        return new Stream(this.value.concat(stream.value));
+    }
+
     each(handler) {
         this.value.forEach(handler);
         return this;
@@ -86,7 +90,6 @@ class StreamIf {
 module.exports = Stream;
 
 // todo
-// union
 // flatten
 // filter n
 // for n

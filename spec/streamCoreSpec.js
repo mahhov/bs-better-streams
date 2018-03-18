@@ -1,6 +1,6 @@
 const st = require('../src/index.js');
 
-describe('stream core', () => {
+describe('core', () => {
     let stream, streamObj;
 
     beforeEach(() => {
@@ -10,6 +10,15 @@ describe('stream core', () => {
 
     it('#value', () => {
         expect(stream.value).toEqual([1, 2, 3]);
+    });
+
+    it('#union', () => {
+        let result = stream.union(streamObj);
+        stream.value[0] = 0;
+        streamObj.value[0].v = -1;
+        expect(stream.value).toEqual([0, 2, 3]);
+        expect(streamObj.value).toEqual([{v: -1}, {v: 2}, {v: 3}]);
+        expect(result.value).toEqual([1, 2, 3, {v: -1}, {v: 2}, {v: 3}]);
     });
 
     it('#each', () => {
@@ -80,8 +89,8 @@ describe('stream core', () => {
         expect(result.value).toEqual(5);
         expect(stream.value).toEqual([1, 2, 3]);
     });
-    
-    it('#length', function() {
+
+    it('#length', function () {
         expect(stream.length).toEqual(3);
         expect(streamObj.length).toEqual(3);
     });
