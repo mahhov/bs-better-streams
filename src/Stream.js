@@ -49,13 +49,9 @@ class Stream {
     //
     // }
     //
-    // unwrap() {
-    //     return this.value;
-    // }
-    //
-    // get length() {
-    //     return this.value && this.value.length;
-    // }
+    get length() {
+        return this.value.length;
+    }
 }
 
 module.exports = Stream;

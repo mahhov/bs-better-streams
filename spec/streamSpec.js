@@ -1,6 +1,6 @@
 const st = require('../src/index.js');
 
-describe('stream basic methods', () => {
+describe('stream core', () => {
     let stream, streamObj;
 
     beforeEach(() => {
@@ -79,5 +79,10 @@ describe('stream basic methods', () => {
         expect(handler).toHaveBeenCalledWith([1, 2, 3]);
         expect(result.value).toEqual(5);
         expect(stream.value).toEqual([1, 2, 3]);
+    });
+    
+    it('#length', function() {
+        expect(stream.length).toEqual(3);
+        expect(streamObj.length).toEqual(3);
     });
 });
