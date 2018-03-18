@@ -53,7 +53,8 @@ class Stream {
 }
 
 class StreamIf {
-    constructor(stream, predicate) {
+    constructor(stream, predicate, passedValues) {
+        this.passedValues = passedValues || [];
         let trues = [];
         let falses = [];
         stream.each((elem, ...args) => {
@@ -68,14 +69,30 @@ class StreamIf {
         return this;
     }
 
+    elseIf(predicate) {
+        return new StreamIf(this.elseValue, predicate, this.passedValues.concat(this.thenValue.value));
+    }
+
     else(handler) {
         this.elseValue = handler(this.elseValue);
         return this;
     }
 
     done() {
-        return new Stream(this.thenValue.value.concat(this.elseValue.value));
+        return new Stream(this.passedValues.concat(this.thenValue.value, this.elseValue.value));
     }
 }
 
 module.exports = Stream;
+
+// todo
+// union
+// flatten
+// filter n
+// for n
+// for iterate
+// while
+// split
+// group by
+// ways to reduce / grow
+// promises
