@@ -6,6 +6,7 @@ class Stream {
     }
 
     each(handler) {
+        this.value.forEach(handler)
     }
 
     map(handler) {
