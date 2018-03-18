@@ -1,0 +1,18 @@
+//{
+//  "name": "bs-better-stream",
+//  "version": "0.1.0",
+//  "description": "",
+//  "main": "src/index.js",
+//  "scripts": {
+//    "test": "jasmine"
+//  },
+//  "author": "mahhov",
+//  "license": "ISC",
+//  "repository": {
+//    "type": "git",
+//    "url": "https://github.com/mahhov/bs-better-underscore"
+//  },
+//  "devDependencies": {
+//    "jasmine": "^3.1.0"
+//  }
+//}
