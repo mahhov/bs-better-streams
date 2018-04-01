@@ -29,18 +29,16 @@ class Stream {
 module.exports = Stream;
 
 // todo
-// union
-// pluck
-// flatten
-// repeat
-// set
-// size getter
-// value getter
 // each
 // map
 // filter
 // filter n
 // filterIndex
+// pluck
+// set
+// flatten
+// union
+// repeat
 // if
 // then
 // elseif
