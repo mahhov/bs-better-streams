@@ -1,55 +1,17 @@
-const stream = require('../src/index');
+const Stream = require('../src/Stream');
 
-let dog = {
-    size: 3,
-    sound: 'bark',
-    planet: 'earth',
-    description: 'smelly'
-};
+let s = new Stream();
 
-let cat = {
-    size: 3,
-    sound: 'purr',
-    planet: 'earth',
-    description: 'tasty'
-};
+s.each((value, index) => {
+    console.log('value', value);
+}).each((value, index) => {
+    console.log('index', index);
+});
 
-let joojoo = {
-    size: 8,
-    sound: 'joououooouuuiiuuouo',
-    planet: 'Jupiter',
-    description: 'superior being',
-};
+s.each((value, index) => {
+    console.log('value + index', value, index);
+});
 
-let animals = [dog, cat, joojoo];
-
-stream(animals)
-    .if(animal => animal.planet === 'earth')
-    .then(earthAnimals => earthAnimals
-        .set('safe', () => true))
-    .else(nonEarthAnimals => nonEarthAnimals
-        .set('safe', animal => animal.size < 6));
-
-// [
-//     {
-//         "size": 3,
-//         "sound": "bark",
-//         "planet": "earth",
-//         "description": "smelly",
-//         "safe": true
-//     },
-//     {
-//         "size": 3,
-//         "sound": "purr",
-//         "planet": "earth",
-//         "description": "tasty",
-//         "safe": true
-//     },
-//     {
-//         "size": 8,
-//         "sound": "joououooouuuiiuuouo",
-//         "planet": "Jupiter",
-//         "description": "superior being",
-//         "safe": false
-//     }
-// ]
+s.write(10);
+s.write(11);
+s.write(12);
