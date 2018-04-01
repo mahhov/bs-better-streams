@@ -22,7 +22,7 @@ class Stream {
     }
 
     get length() {
-        return this.value.length;
+        return this.values.length;
     }
 }
 
