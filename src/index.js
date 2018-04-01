@@ -1,5 +1,5 @@
 const Stream = require('./Stream');
 
-let stream = value => new Stream(value);
+let stream = () => new Stream();
 
 module.exports = stream;
