@@ -1,6 +1,6 @@
 const st = require('../src/index.js');
 
-describe('branching', () => {
+xdescribe('branching', () => {
     let stream;
 
     beforeEach(() => {
