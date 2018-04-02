@@ -42,20 +42,21 @@ class Stream {
     }
 
     filterCount(count) {
-        return this._addNext(new Stream((value, index) => {
-            return index < count ? [value] : [];
-        }));
+        return this.filter((value, index) => index < count);
+    }
+
+    filterIndex(indexes) {
+        return this.filter((value, index) => indexes.includes(index));
     }
 
     get length() {
-        return this.outValues.length; // inputCount
+        return this.outValues.length; // inputCount?
     }
 }
 
 module.exports = Stream;
 
 // todo
-// filterIndex
 // pluck
 // set
 // flatten
