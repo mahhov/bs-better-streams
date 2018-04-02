@@ -53,6 +53,13 @@ class Stream {
         return this._addNext(new Stream(value => [value[name]]));
     }
 
+    set(name, handler) {
+        return this._addNext(new Stream((value, index) => {
+            value[name] = handler(value, index);
+            return [value];
+        }));
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -61,7 +68,6 @@ class Stream {
 module.exports = Stream;
 
 // todo
-// set
 // flatten
 // union
 // repeat

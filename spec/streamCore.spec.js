@@ -95,4 +95,14 @@ describe('core', () => {
         expect(s.outValues).toEqual([{key: 'value1'}, {key: 'value2'}, {key: 'value3'}, {key: 'value4'}]);
         expect(s2.outValues).toEqual(['value1', 'value2', 'value3', 'value4']);
     });
+
+    it('set', () => {
+        let s2 = s.set('sum', (value, index) => value.number + index);
+        s.write({number: 10});
+        s.write({number: 20});
+        s.write({number: 30});
+        s.write({number: 40});
+        expect(s.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {number: 40, sum: 43}]);
+        expect(s2.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {number: 40, sum: 43}]);
+    });
 });
