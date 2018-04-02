@@ -1,24 +1,38 @@
 class Stream {
-    constructor(preWrite) {
+    constructor(writer) {
         this.values = [];
         this.next = [];
-        this.preWrite = preWrite;
+        this.writer = writer;
+    }
+
+    _addNext(stream) {
+        this.next.push(stream);
+        return stream
     }
 
     write(value) {
-        this.preWrite && this.preWrite(value, this.values.length);
+        let outValues = typeof this.writer === 'function' ? this.writer(value, this.values.length) : [value];
 
-        this.next.forEach(nextStream => {
-            nextStream.write(value, this.values.length);
+        outValues.forEach(outValue => {
+            this.next.forEach(nextStream => {
+                nextStream.write(outValue);
+            });
         });
 
         this.values.push(value);
     }
 
     each(handler) {
-        let stream = new Stream(handler);
-        this.next.push(stream);
-        return stream;
+        return this._addNext(new Stream((value, index) => {
+            handler(value, index);
+            return [value];
+        }));
+    }
+
+    map(handler) {
+        return this._addNext(new Stream((value, index) => {
+            return [handler(value, index)];
+        }));
     }
 
     get length() {
@@ -52,3 +66,4 @@ module.exports = Stream;
 // group by index
 // group by n
 // group by predicate
+// accumulate for later
