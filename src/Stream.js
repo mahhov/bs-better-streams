@@ -1,6 +1,7 @@
 class Stream {
     constructor(writer) {
-        this.values = [];
+        this.outValues = [];
+        this.inputCount = 0;
         this.next = [];
         this.writer = writer;
     }
@@ -11,15 +12,14 @@ class Stream {
     }
 
     write(value) {
-        let outValues = typeof this.writer === 'function' ? this.writer(value, this.values.length) : [value];
+        let outValues = typeof this.writer === 'function' ? this.writer(value, this.inputCount++) : [value];
 
         outValues.forEach(outValue => {
             this.next.forEach(nextStream => {
                 nextStream.write(outValue);
             });
+            this.outValues.push(outValue);
         });
-
-        this.values.push(value);
     }
 
     each(handler) {
@@ -36,7 +36,7 @@ class Stream {
     }
 
     get length() {
-        return this.values.length;
+        return this.inputCount;
     }
 }
 
