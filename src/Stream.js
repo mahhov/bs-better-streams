@@ -30,9 +30,7 @@ class Stream {
     }
 
     map(handler) {
-        return this._addNext(new Stream((value, index) => {
-            return [handler(value, index)];
-        }));
+        return this._addNext(new Stream((value, index) => [handler(value, index)]));
     }
 
     filter(handler) {
@@ -60,6 +58,10 @@ class Stream {
         }));
     }
 
+    flatten() {
+        return this._addNext(new Stream(value => value));
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -68,7 +70,6 @@ class Stream {
 module.exports = Stream;
 
 // todo
-// flatten
 // union
 // repeat
 // if

@@ -105,4 +105,14 @@ describe('core', () => {
         expect(s.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {number: 40, sum: 43}]);
         expect(s2.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {number: 40, sum: 43}]);
     });
+
+    it('flatten', () => {
+        let s2 = s.flatten();
+        s.write([10, 11, 12, 13, 14]);
+        s.write([20, 21, 22, 23, 24]);
+        s.write([30, 31, 32, 33, 34]);
+        s.write([40, 41, 42, 43, 44]);
+        expect(s.outValues).toEqual([[10, 11, 12, 13, 14], [20, 21, 22, 23, 24], [30, 31, 32, 33, 34], [40, 41, 42, 43, 44]]);
+        expect(s2.outValues).toEqual([10, 11, 12, 13, 14, 20, 21, 22, 23, 24, 30, 31, 32, 33, 34, 40, 41, 42, 43, 44]);
+    });
 });
