@@ -11,7 +11,8 @@ describe('core', () => {
     });
 
     it('each', () => {
-        s.each(spy1).each(spy2);
+        let s2 = s.each(spy1);
+        let s3 = s2.each(spy2);
         s.write(10);
         s.write(11);
         s.write(12);
@@ -23,5 +24,29 @@ describe('core', () => {
         expect(spy1).toHaveBeenCalledWith(10, 0);
         expect(spy1).toHaveBeenCalledWith(11, 1);
         expect(spy1).toHaveBeenCalledWith(12, 2);
+        expect(s.outValues).toEqual([10, 11, 12]);
+        expect(s2.outValues).toEqual([10, 11, 12]);
+        expect(s3.outValues).toEqual([10, 11, 12]);
+    });
+
+    it('map', () => {
+        spy1.and.callFake(x => x * 2);
+        spy2.and.callFake(x => x + 3);
+        let s2 = s.map(spy1);
+        let s3 = s2.map(spy2);
+        s.write(10);
+        s.write(11);
+        s.write(12);
+        expect(spy1).toHaveBeenCalledTimes(3);
+        expect(spy1).toHaveBeenCalledWith(10, 0);
+        expect(spy1).toHaveBeenCalledWith(11, 1);
+        expect(spy1).toHaveBeenCalledWith(12, 2);
+        expect(spy2).toHaveBeenCalledTimes(3);
+        expect(spy2).toHaveBeenCalledWith(20, 0);
+        expect(spy2).toHaveBeenCalledWith(22, 1);
+        expect(spy2).toHaveBeenCalledWith(24, 2);
+        expect(s.outValues).toEqual([10, 11, 12]);
+        expect(s2.outValues).toEqual([20, 22, 24]);
+        expect(s3.outValues).toEqual([23, 25, 27]);
     });
 });
