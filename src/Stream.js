@@ -49,6 +49,10 @@ class Stream {
         return this.filter((value, index) => indexes.includes(index));
     }
 
+    pluck(name) {
+        return this._addNext(new Stream(value => [value[name]]));
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -57,7 +61,6 @@ class Stream {
 module.exports = Stream;
 
 // todo
-// pluck
 // set
 // flatten
 // union

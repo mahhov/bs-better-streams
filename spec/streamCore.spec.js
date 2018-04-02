@@ -85,4 +85,14 @@ describe('core', () => {
         expect(s.outValues).toEqual([10, 11, 12, 13]);
         expect(s2.outValues).toEqual([11, 12]);
     });
+
+    it('pluck', () => {
+        let s2 = s.pluck('key');
+        s.write({key: 'value1'});
+        s.write({key: 'value2'});
+        s.write({key: 'value3'});
+        s.write({key: 'value4'});
+        expect(s.outValues).toEqual([{key: 'value1'}, {key: 'value2'}, {key: 'value3'}, {key: 'value4'}]);
+        expect(s2.outValues).toEqual(['value1', 'value2', 'value3', 'value4']);
+    });
 });
