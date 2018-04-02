@@ -41,18 +41,20 @@ class Stream {
         }));
     }
 
+    filterCount(count) {
+        return this._addNext(new Stream((value, index) => {
+            return index < count ? [value] : [];
+        }));
+    }
+
     get length() {
-        return this.inputCount;
+        return this.outValues.length; // inputCount
     }
 }
 
 module.exports = Stream;
 
 // todo
-// each
-// map
-// filter
-// filter n
 // filterIndex
 // pluck
 // set

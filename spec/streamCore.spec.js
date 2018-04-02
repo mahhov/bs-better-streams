@@ -65,4 +65,14 @@ describe('core', () => {
         expect(s.outValues).toEqual([10, 11, 12, 13]);
         expect(s2.outValues).toEqual([10, 11]);
     });
+
+    it('filterCount', () => {
+        let s2 = s.filterCount(2);
+        s.write(10);
+        s.write(11);
+        s.write(12);
+        s.write(13);
+        expect(s.outValues).toEqual([10, 11, 12, 13]);
+        expect(s2.outValues).toEqual([10, 11]);
+    });
 });
