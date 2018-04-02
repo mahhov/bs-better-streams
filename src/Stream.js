@@ -35,6 +35,12 @@ class Stream {
         }));
     }
 
+    filter(handler) {
+        return this._addNext(new Stream((value, index) => {
+            return handler(value, index) ? [value] : [];
+        }));
+    }
+
     get length() {
         return this.inputCount;
     }
