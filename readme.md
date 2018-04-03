@@ -19,9 +19,9 @@ myStream.write(11, 21, 31);
 
 `myStream.write(10, 20, 30);`
 
-### writeArray
+### write array
 
-`myStream.write([10, 20, 30]);`
+`myStream.write(...[10, 20, 30]);`
 
 ### each
 

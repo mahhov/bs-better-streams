@@ -28,7 +28,7 @@ describe('write', () => {
     });
 
     it('single list argument', () => {
-        s.writeArray([10, 11, 12]);
+        s.write(...[10, 11, 12]);
         let s2 = s.each(spy1);
         let s3 = s2.each(spy2);
         expect(spy1).toHaveBeenCalledTimes(3);

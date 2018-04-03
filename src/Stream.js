@@ -15,10 +15,6 @@ class Stream {
     }
 
     write(...values) {
-        this.writeArray(values);
-    }
-
-    writeArray(values) {
         values.forEach(value => {
             let outValues = typeof this.writer === 'function' ? this.writer(value, this.inputCount++) : [value];
             outValues.forEach(outValue => {
