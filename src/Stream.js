@@ -14,14 +14,19 @@ class Stream {
         return stream
     }
 
-    write(value) {
-        let outValues = typeof this.writer === 'function' ? this.writer(value, this.inputCount++) : [value];
+    write(...values) {
+        this.writeArray(values);
+    }
 
-        outValues.forEach(outValue => {
-            this.next.forEach(nextStream => {
-                nextStream.write(outValue);
+    writeArray(values) {
+        values.forEach(value => {
+            let outValues = typeof this.writer === 'function' ? this.writer(value, this.inputCount++) : [value];
+            outValues.forEach(outValue => {
+                this.next.forEach(nextStream => {
+                    nextStream.write(outValue);
+                });
+                this.outValues.push(outValue);
             });
-            this.outValues.push(outValue);
         });
     }
 
