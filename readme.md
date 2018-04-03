@@ -4,108 +4,89 @@
 
 `npm i -save bs-better-stream`
 
-`const s = require('bs-better-stream');`
+`const stream = require('bs-better-stream');`
+
+```js
+let myStream = stream();
+myStream.write(10, 20, 30);
+myStream.each(console.log);
+myStream.write(11, 21, 31);
+```
 
 ## Overview
 
-### Given
+### write
 
-```
-const stream = require('../src/index');
+`myStream.write(10, 20, 30);`
 
-let dog = {
-    size: 3,
-    sound: 'bark',
-    planet: 'earth',
-    description: 'smelly'
-};
+### writeArray
 
-let cat = {
-    size: 3,
-    sound: 'purr',
-    planet: 'earth',
-    description: 'tasty'
-};
+`myStream.write([10, 20, 30]);`
 
-let joojoo = {
-    size: 8,
-    sound: 'joououooouuuiiuuouo',
-    planet: 'Jupiter',
-    description: 'superior being',
-};
+### each
 
-let animals = [dog, cat, joojoo];
-```
+`myStream.each( (value, index) => doOperation(value, index) );`
 
-### Then
+### map
 
-```
-stream(animals)
-    .if(animal => animal.planet === 'earth')
-    .then(earthAnimals => earthAnimals
-        .set('safe', () => true))
-    .else(nonEarthAnimals => nonEarthAnimals
-        .set('safe', animal => animal.size < 6));
+`myStream.map( (value, index) => value * index );`
+
+### filter
+
+`myStream.filter( (value, index) => value > index );`
+
+### filterCount
+
+```js
+let outStream = myStream.filterCount(3);
+myStream.write('first', 'second', 'third', 'fourth', 'fifth');
+// outStream.outValues equals [first, second, third]
 ```
 
-### Results in
+### filterIndex
 
-```
-[
-    {
-        "size": 3,
-        "sound": "bark",
-        "planet": "earth",
-        "description": "smelly",
-        "safe": true
-    },
-    {
-        "size": 3,
-        "sound": "purr",
-        "planet": "earth",
-        "description": "tasty",
-        "safe": true
-    },
-    {
-        "size": 8,
-        "sound": "joououooouuuiiuuouo",
-        "planet": "Jupiter",
-        "description": "superior being",
-        "safe": false
-    }
-]
+```js
+let outStream = myStream.filterIndex([0, 2, 3]);
+myStream.write('first', 'second', 'third', 'fourth', 'fifth');
+// outStream.outValues equals [first, third, fourth]
 ```
 
-## methods
+### pluck
 
-stream(value)
+```js
+let outStream = myStream.filter('key');
+myStream.write({key: 'value'});
+// outStream.outValues equals ['value']
+```
 
-length
+### set
 
-value
+```js
+let outStream = myStream.set('sum', (object, index) =>  object.number + object.otherNumber + index );
+myStream.write({number: 5, otherNumber: 10});
+// outStream.outValues equals [15]
+```
 
-union(stream)
+### repeat
 
-each(handler)
+```js
+let outStream = myStream.repeat( (value, index) =>  value + index );
+myStream.write(2, 3, 2);
+// outStream.outValues equals [2, 2, 3, 3, 3, 3, 2, 2, 2, 2]
+```
 
-map(handler)
+### repeatCount
 
-filter(handler)
+```js
+let outStream = myStream.repeatCount(2);
+myStream.write(2, 3, 2);
+// outStream.outValues equals [2, 2, 3, 3, 2, 2]
+```
 
-pluck(name)
+### flatten
 
-set(field, handler)
-
-repeat(count)
-
-asList(handler)
-
-if(predicate)
-
-then(handler)
-
-elseIf(predicate)
-
-else(handler)
-
-done()
+```js
+let outStream = myStream.flatten(2);
+myStream.write([2], [3], [2, 4]);
+// outStream.outValues equals [2, 3, 2, 4]
+```
