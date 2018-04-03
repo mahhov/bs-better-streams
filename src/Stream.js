@@ -8,6 +8,9 @@ class Stream {
 
     _addNext(stream) {
         this.next.push(stream);
+        this.outValues.forEach(value => {
+            stream.write(value);
+        });
         return stream
     }
 
@@ -85,4 +88,3 @@ module.exports = Stream;
 // group by index
 // group by n
 // group by predicate
-// accumulate for later
