@@ -79,6 +79,12 @@ class Stream {
         return this._addNext(new Stream(value => value));
     }
 
+    join(stream) {
+        let childStream = this._addNext(new Stream());
+        stream._addNext(childStream);
+        return childStream;
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -87,7 +93,6 @@ class Stream {
 module.exports = Stream;
 
 // todo
-// union / join 2 streams
 // if
 // then
 // elseif

@@ -86,7 +86,36 @@ myStream.write(2, 3, 2);
 ### flatten
 
 ```js
-let outStream = myStream.flatten(2);
+let outStream = myStream.flatten();
 myStream.write([2], [3], [2, 4]);
 // outStream.outValues equals [2, 3, 2, 4]
+```
+
+### join
+
+```js
+let outStream = myStream.join(otherStream);
+myStream.write(1, 2);
+otherStream.write(3, 4);
+myStream.write(5, 6);
+// outStream.outValues equals [1, 2, 3, 4, 5, 6]
+```
+
+### length
+
+`myStream.length`
+
+### outValues
+
+`myStream.outValues`
+
+### accumulation
+
+you can use streams before and after you have began writing to them
+
+```js
+let myStream = stream();
+myStream.write(11, 21, 31);
+myStream.each(console.log);
+myStream.write(12, 22, 32);
 ```
