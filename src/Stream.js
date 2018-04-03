@@ -76,9 +76,7 @@ class Stream {
     }
 
     join(stream) {
-        let childStream = this._addNext(new Stream());
-        stream._addNext(childStream);
-        return childStream;
+        return stream._addNext(this._addNext(new Stream()));
     }
 
     get length() {
