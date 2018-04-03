@@ -6,7 +6,7 @@ class Stream {
         this.writer = writer;
     }
 
-    _addNext(stream) {
+    to(stream) {
         this.next.push(stream);
         this.outValues.forEach(value => {
             stream.write(value);
@@ -36,18 +36,18 @@ class Stream {
     }
 
     each(handler) {
-        return this._addNext(new Stream((value, index) => {
+        return this.to(new Stream((value, index) => {
             handler(value, index);
             return [value];
         }));
     }
 
     map(handler) {
-        return this._addNext(new Stream((value, index) => [handler(value, index)]));
+        return this.to(new Stream((value, index) => [handler(value, index)]));
     }
 
     filter(handler) {
-        return this._addNext(new Stream((value, index) => handler(value, index) ? [value] : []));
+        return this.to(new Stream((value, index) => handler(value, index) ? [value] : []));
     }
 
     filterCount(count) {
@@ -59,33 +59,33 @@ class Stream {
     }
 
     pluck(name) {
-        return this._addNext(new Stream(value => [value[name]]));
+        return this.to(new Stream(value => [value[name]]));
     }
 
     set(name, handler) {
-        return this._addNext(new Stream((value, index) => {
+        return this.to(new Stream((value, index) => {
             value[name] = handler(value, index);
             return [value];
         }));
     }
 
     repeat(handler) {
-        return this._addNext(new Stream((value, index) => {
+        return this.to(new Stream((value, index) => {
             let count = handler(value, index);
             return Array(count).fill(value)
         }));
     }
 
     repeatCount(count) {
-        return this._addNext(new Stream((value, index) => Array(count).fill(value)));
+        return this.to(new Stream((value, index) => Array(count).fill(value)));
     }
 
     flatten() {
-        return this._addNext(new Stream(value => value));
+        return this.to(new Stream(value => value));
     }
 
     join(stream) {
-        return stream._addNext(this._addNext(new Stream()));
+        return stream.to(this.to(new Stream()));
     }
 
     get length() {

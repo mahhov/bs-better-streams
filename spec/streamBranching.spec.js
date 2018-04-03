@@ -25,4 +25,19 @@ describe('branching', () => {
         expect(s2.outValues).toEqual([12, 13, 16, 17]);
         expect(s3.outValues).toEqual([10, 11, 12, 13, 14, 15, 16, 17]);
     });
+
+    it('to', function () {
+        let s2 = stream();
+        s.write(10);
+        s.write(11);
+        s2.write(12);
+        s2.write(13);
+        s.to(s2);
+        s.write(14);
+        s.write(15);
+        s2.write(16);
+        s2.write(17);
+        expect(s.outValues).toEqual([10, 11, 14, 15]);
+        expect(s2.outValues).toEqual([12, 13, 10, 11, 14, 15, 16, 17]);
+    });
 });

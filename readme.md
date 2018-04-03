@@ -110,6 +110,15 @@ myStream.write(5, 6);
 // outStream.outValues equals [1, 2, 3, 4, 5, 6]
 ```
 
+### to
+
+```js
+myStream.to(otherStream);
+myStream.write(1, 2);
+otherStream.write(3, 4);
+// otherStream.outValues equals [1, 2, 3, 4]
+```
+
 ### length
 
 `myStream.length`
