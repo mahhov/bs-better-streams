@@ -42,9 +42,7 @@ class Stream {
     }
 
     filter(handler) {
-        return this._addNext(new Stream((value, index) => {
-            return handler(value, index) ? [value] : [];
-        }));
+        return this._addNext(new Stream((value, index) => handler(value, index) ? [value] : []));
     }
 
     filterCount(count) {
@@ -66,6 +64,17 @@ class Stream {
         }));
     }
 
+    repeat(handler) {
+        return this._addNext(new Stream((value, index) => {
+            let count = handler(value, index);
+            return Array(count).fill(value)
+        }));
+    }
+
+    repeatCount(count) {
+        return this._addNext(new Stream((value, index) => Array(count).fill(value)));
+    }
+
     flatten() {
         return this._addNext(new Stream(value => value));
     }
@@ -78,8 +87,7 @@ class Stream {
 module.exports = Stream;
 
 // todo
-// union
-// repeat
+// union / join 2 streams
 // if
 // then
 // elseif
