@@ -23,6 +23,15 @@ myStream.write(11, 21, 31);
 
 `myStream.write(...[10, 20, 30]);`
 
+### write promise
+
+```js
+let promise1 = Promise.resolve('i hate `.then`s');
+let promise2 = Promise.reject('rejections r ignored');
+myStream.writePromise(promise1, promise2);
+// myStream.outValues equals [10]
+```
+
 ### each
 
 `myStream.each( (value, index) => doOperation(value, index) );`

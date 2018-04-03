@@ -26,6 +26,15 @@ class Stream {
         });
     }
 
+    writePromise(...promises) {
+        promises.forEach(promise => {
+            promise.then(value => {
+                this.write(value);
+            }).catch(() => {
+            });
+        });
+    }
+
     each(handler) {
         return this._addNext(new Stream((value, index) => {
             handler(value, index);

@@ -82,7 +82,7 @@ xdescribe('core', () => {
         expect(result.value).toEqual([{v: 0}, {v: 0}, {v: 0}, {v: 2}, {v: 2}, {v: 2}, {v: 3}, {v: 3}, {v: 3}]);
     });
 
-    it('#asList', function () {
+    it('#asList', () => {
         let handler = jasmine.createSpy('handler').and.returnValue(5);
         let result = stream.asList(handler);
         expect(handler).toHaveBeenCalledWith([1, 2, 3]);
@@ -90,7 +90,7 @@ xdescribe('core', () => {
         expect(stream.value).toEqual([1, 2, 3]);
     });
 
-    it('#length', function () {
+    it('#length', () => {
         expect(stream.length).toEqual(3);
         expect(streamObj.length).toEqual(3);
     });

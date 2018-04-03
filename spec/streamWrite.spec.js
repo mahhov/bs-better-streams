@@ -43,4 +43,14 @@ describe('write', () => {
         expect(s2.outValues).toEqual([10, 11, 12]);
         expect(s3.outValues).toEqual([10, 11, 12]);
     });
+
+    it('promise', done => {
+        let resolved = Promise.resolve(10);
+        let rejected = Promise.reject(15);
+        s.writePromise(resolved, rejected);
+        s.each(value => {
+            expect(value).toEqual(10);
+            done();
+        });
+    });
 });
