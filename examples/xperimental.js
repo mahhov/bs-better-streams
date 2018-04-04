@@ -2,14 +2,16 @@ const Stream = require('../src/Stream');
 
 let myStream = new Stream();
 
-let promise1 = Promise.resolve(1);
-let promise2 = Promise.resolve(2);
-let promise3 = Promise.resolve(3);
-
-myStream.write(promise1, promise2, promise3);
-
-let x = myStream.wait();
+myStream.write(Promise.resolve('stream'));
+myStream.write(Promise.resolve('async'));
+myStream.write(Promise.resolve('data'));
+myStream.write(Promise.reject('rejected'));
+let otherStream = myStream.wait();
+myStream.write(Promise.resolve('without needing'));
+myStream.write(Promise.resolve('async/await'));
+myStream.write(Promise.resolve('or .then'));
+// otherStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
 
 setTimeout(() => {
-    console.log(x.outValues);
+    console.log(otherStream.outValues);
 }, 100);

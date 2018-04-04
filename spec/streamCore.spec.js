@@ -20,10 +20,10 @@ describe('core', () => {
         expect(spy1).toHaveBeenCalledWith(10, 0);
         expect(spy1).toHaveBeenCalledWith(11, 1);
         expect(spy1).toHaveBeenCalledWith(12, 2);
-        expect(spy1).toHaveBeenCalledTimes(3);
-        expect(spy1).toHaveBeenCalledWith(10, 0);
-        expect(spy1).toHaveBeenCalledWith(11, 1);
-        expect(spy1).toHaveBeenCalledWith(12, 2);
+        expect(spy2).toHaveBeenCalledTimes(3);
+        expect(spy2).toHaveBeenCalledWith(10, 0);
+        expect(spy2).toHaveBeenCalledWith(11, 1);
+        expect(spy2).toHaveBeenCalledWith(12, 2);
         expect(s.outValues).toEqual([10, 11, 12]);
         expect(s2.outValues).toEqual([10, 11, 12]);
         expect(s3.outValues).toEqual([10, 11, 12]);

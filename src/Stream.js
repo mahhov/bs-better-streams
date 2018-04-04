@@ -14,15 +14,16 @@ class Stream {
         return stream
     }
 
+    emit(outValue) {
+        this.next.forEach(nextStream => {
+            nextStream.write(outValue);
+        });
+        this.outValues.push(outValue);
+    }
+
     write(...values) {
         values.forEach(value => {
-            let outValues = typeof this.writer === 'function' ? this.writer(value, this.inputCount++) : [value];
-            outValues.forEach(outValue => {
-                this.next.forEach(nextStream => {
-                    nextStream.write(outValue);
-                });
-                this.outValues.push(outValue);
-            });
+            typeof this.writer === 'function' ? this.writer(value, this.inputCount++) : this.emit(value);
         });
     }
 
@@ -36,18 +37,22 @@ class Stream {
     }
 
     each(handler) {
-        return this.to(new Stream((value, index) => {
+        return this.to(new Stream(function (value, index) {
             handler(value, index);
-            return [value];
+            this.emit(value);
         }));
     }
 
     map(handler) {
-        return this.to(new Stream((value, index) => [handler(value, index)]));
+        return this.to(new Stream(function (value, index) {
+            this.emit(handler(value, index));
+        }));
     }
 
     filter(handler) {
-        return this.to(new Stream((value, index) => handler(value, index) ? [value] : []));
+        return this.to(new Stream(function (value, index) {
+            handler(value, index) && this.emit(value)
+        }));
     }
 
     filterCount(count) {
@@ -59,29 +64,39 @@ class Stream {
     }
 
     pluck(name) {
-        return this.to(new Stream(value => [value[name]]));
+        return this.to(new Stream(function (value) {
+            this.emit(value[name]);
+        }));
     }
 
     set(name, handler) {
-        return this.to(new Stream((value, index) => {
+        return this.to(new Stream(function (value, index) {
             value[name] = handler(value, index);
-            return [value];
+            this.emit(value);
         }));
     }
 
     repeat(handler) {
-        return this.to(new Stream((value, index) => {
+        return this.to(new Stream(function (value, index) {
             let count = handler(value, index);
-            return Array(count).fill(value)
+            for (let i = 0; i < count; i++)
+                this.emit(value);
         }));
     }
 
     repeatCount(count) {
-        return this.to(new Stream((value, index) => Array(count).fill(value)));
+        return this.to(new Stream(function (value) {
+            for (let i = 0; i < count; i++)
+                this.emit(value);
+        }));
     }
 
     flatten() {
-        return this.to(new Stream(value => value));
+        return this.to(new Stream(function (value) {
+            value.forEach(item => {
+                this.emit(item);
+            });
+        }));
     }
 
     join(stream) {
@@ -89,11 +104,12 @@ class Stream {
     }
 
     wait() {
-        let resolvedStream = new Stream();
-        this.each(promise => {
-            resolvedStream.writePromise(promise);
-        });
-        return resolvedStream;
+        return this.to(new Stream(function (value) {
+            value.then(resolve => {
+                this.emit(resolve);
+            }).catch(() => {
+            });
+        }));
     }
 
     get length() {
