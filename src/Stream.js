@@ -88,6 +88,14 @@ class Stream {
         return stream.to(this.to(new Stream()));
     }
 
+    wait() {
+        let resolvedStream = new Stream();
+        this.each(promise => {
+            resolvedStream.writePromise(promise);
+        });
+        return resolvedStream;
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
