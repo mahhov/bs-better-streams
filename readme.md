@@ -119,6 +119,20 @@ otherStream.write(3, 4);
 // otherStream.outValues equals [1, 2, 3, 4]
 ```
 
+### await
+
+```js
+myStream.write(Promise.resolve('stream'));
+myStream.write(Promise.resolve('async'));
+myStream.write(Promise.resolve('data'));
+myStream.write(Promise.reject('rejected'));
+let otherStream = myStream.wait();
+myStream.write(Promise.resolve('without needing'));
+myStream.write(Promise.resolve('async/await'));
+myStream.write(Promise.resolve('or .then'));
+// otherStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
+```
+
 ### length
 
 `myStream.length`
