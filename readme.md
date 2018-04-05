@@ -133,6 +133,15 @@ myStream.write(Promise.resolve('or .then'));
 // otherStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
 ```
 
+### if
+
+```js
+myStream.write(110, 10, 30, 130, 50, 150);
+let ifStreams = myStream.if(value => value > 100);
+// ifStreams.then.outValues equals [110, 130, 150]
+// ifStreams.else.outValues equals [10, 30, 50]
+```
+
 ### length
 
 `myStream.length`

@@ -112,6 +112,17 @@ class Stream {
         }));
     }
 
+    if(handler) {
+        let then = new Stream();
+        let els = new Stream();
+
+        this.to(new Stream((value, index) => {
+            handler(value, index) ? then.emit(value) : els.emit(value);
+        }));
+
+        return {then, else: els};
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -120,10 +131,7 @@ class Stream {
 module.exports = Stream;
 
 // todo
-// if
-// then
 // elseif
-// endif
 // for n
 // for iterate
 // on
