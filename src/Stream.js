@@ -123,6 +123,23 @@ class Stream {
         return {then, else: els};
     }
 
+    group(handler) {
+        let groups = {};
+
+        this.to(new Stream((value, index) => {
+            let group = handler(value, index);
+            groups[group] = groups[group] || new Stream();
+            groups[group].emit(value);
+        }));
+
+        return groups;
+    }
+
+    groupFirstCount(count) {
+        return this.group((value, index) =>
+            index < count ? 'first' : 'rest');
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -138,6 +155,4 @@ module.exports = Stream;
 // stopon
 // generating
 // while/until loops
-// group by index
-// group by n
-// group by predicate
+// group index (stream.groupIndex([0,5,6], [1,4,7], [2,3]) would return in 4 streams (named 0, 1, 2, and rest) with sizes 3, 3, 2, and n - 7 

@@ -47,4 +47,24 @@ describe('branching', () => {
         expect(ifStreams.then.outValues).toEqual([12, 14, 13]);
         expect(ifStreams.else.outValues).toEqual([16, 17, 15]);
     });
+
+    it('group', () => {
+        let s2 = s.group(value => value % 3);
+        let s3 = s.group(value => value % 2 + 'x');
+        s.write(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        expect(s2[0].outValues).toEqual([0, 3, 6, 9]);
+        expect(s2[1].outValues).toEqual([1, 4, 7]);
+        expect(s2[2].outValues).toEqual([2, 5, 8]);
+        expect(s3['0x'].outValues).toEqual([0, 2, 4, 6, 8]);
+        expect(s3['1x'].outValues).toEqual([1, 3, 5, 7, 9]);
+    });
+
+    it('groupFirstCount', () => {
+        let s2 = s.groupFirstCount(4);
+        s.write(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        expect(s2.first.outValues).toEqual([0, 1, 2, 3]);
+        expect(s2.rest.outValues).toEqual([4, 5, 6, 7, 8, 9]);
+    });
 });

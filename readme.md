@@ -138,8 +138,40 @@ myStream.write(Promise.resolve('or .then'));
 ```js
 myStream.write(110, 10, 30, 130, 50, 150);
 let ifStreams = myStream.if(value => value > 100);
+console.log('numbers over 100:');
+ifStreams.then.each(value => console.log(value));
+console.log('numbers under 100:');
+ifStreams.else.each(value => console.log(value));
 // ifStreams.then.outValues equals [110, 130, 150]
 // ifStreams.else.outValues equals [10, 30, 50]
+```
+
+### group
+
+```js
+myStream.write({species: 'cat', name: 'blue'}, {species: 'cat', name: 'green'}, {species: 'dog', name: 'orange'});
+let species = myStream.group(animal => animal.species);
+console.log('cats:');
+species.cat.each(cat => console.log('  ', cat.name));
+console.log('dogs:');
+species.dog.each(dog => console.log('  ', dog.name));
+// species.cats.outValues equals [{species: 'cat', name: 'blue'}, {species: 'cat', name: 'green'}]
+// species.dogs.outValues equals [{species: 'dog', name: 'orange'}]
+```
+
+### groupFirstCount
+
+```js
+
+myStream.write(20, 30, 40, 50, 60, 70, 80);
+let otherStream = myStream.groupFirstCount(3);
+console.log('first 3 numbers:');
+otherStream.first.each(number => console.log(number));
+console.log('rest of numbers:');
+otherStream.rest.each(number => console.log(number));
+// otherStream.first.outValues equals [10, 20, 30]
+// otherStream.rest.outValues equals [50, 60, 70, 80]
+
 ```
 
 ### length
