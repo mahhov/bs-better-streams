@@ -188,6 +188,22 @@ groupStreams.rest.each(number => console.log(number));
 // groupStreams.rest.outValues equals [20, 40, 70, 80, 90, 100]
 ```
 
+### generate
+
+```js
+myStream.write(10, 40);
+let otherStream = myStream.generate(value => [value + 1, value * 2]);
+// otherStream.outValues equals [10, 11, 20, 40, 41, 80]
+```
+
+### flatMap
+
+```js
+myStream.write(10, 40);
+let otherStream = myStream.flatMap(value => [value + 1, value * 2]);
+// otherStream.outValues equals [11, 20, 41, 80]
+```
+
 ### length
 
 `myStream.length`

@@ -88,10 +88,30 @@ class Stream {
         return this.repeat(() => count);
     }
 
+    // todo group functions catagorically and reflective of specs
     flatten() {
         return this.to(new Stream(function (value) {
             value.forEach(item => {
                 this.emit(item);
+            });
+        }));
+    }
+
+    generate(handler) {
+        return this.to(new Stream(function (value, index) {
+            let values = handler(value, index);
+            this.emit(value);
+            values.forEach(value => {
+                this.emit(value);
+            });
+        }));
+    }
+
+    flatMap(handler) {
+        return this.to(new Stream(function (value, index) {
+            let values = handler(value, index);
+            values.forEach(value => {
+                this.emit(value);
             });
         }));
     }
@@ -137,9 +157,9 @@ class Stream {
             index < count ? 'first' : 'rest');
     }
 
-    groupIndex(...indexes) {
+    groupIndex(...indexesSet) {
         return this.group((value, index) => {
-            let groupIndex = indexes.findIndex(indexSet => indexSet.includes(index));
+            let groupIndex = indexesSet.findIndex(indexes => indexes.includes(index));
             return groupIndex !== -1 ? groupIndex : 'rest';
         });
     }
@@ -157,5 +177,4 @@ module.exports = Stream;
 // for iterate
 // on
 // stopon
-// generating
 // while/until loops

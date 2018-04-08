@@ -1,6 +1,6 @@
 const stream = require('../src/index.js');
 
-describe('branching', () => {
+describe('control', () => {
     let s, spy1, spy2, spy3;
 
     beforeEach(() => {

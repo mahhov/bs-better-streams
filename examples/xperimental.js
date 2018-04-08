@@ -28,4 +28,3 @@ let myStream = new Stream();
 //     .then(stream => value => console.log(value))
 //     .else(stream => value => console.log(value));
 //
-
