@@ -162,16 +162,30 @@ species.dog.each(dog => console.log('  ', dog.name));
 ### groupFirstCount
 
 ```js
-
 myStream.write(20, 30, 40, 50, 60, 70, 80);
-let otherStream = myStream.groupFirstCount(3);
+let groupStreams = myStream.groupFirstCount(3);
 console.log('first 3 numbers:');
-otherStream.first.each(number => console.log(number));
+groupStreams.first.each(number => console.log(number));
 console.log('rest of numbers:');
-otherStream.rest.each(number => console.log(number));
-// otherStream.first.outValues equals [10, 20, 30]
-// otherStream.rest.outValues equals [50, 60, 70, 80]
+groupStreams.rest.each(number => console.log(number));
+// groupStreams.first.outValues equals [10, 20, 30]
+// groupStreams.rest.outValues equals [50, 60, 70, 80]
+```
 
+### groupIndex
+
+```js
+myStream.write(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+let groupStreams = myStream.groupIndex([0], [1, 3, 5, 6]);
+console.log('first number:');
+groupStreams[0].each(number => console.log(number));
+console.log('important numbers:');
+groupStreams[1].each(number => console.log(number));
+console.log('other numbers:');
+groupStreams.rest.each(number => console.log(number));
+// groupStreams[0].outValues equals [0]
+// groupStreams[1].outValues equals [10, 30, 50, 60]
+// groupStreams.rest.outValues equals [20, 40, 70, 80, 90, 100]
 ```
 
 ### length

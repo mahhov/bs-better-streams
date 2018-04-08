@@ -29,11 +29,3 @@ let myStream = new Stream();
 //     .else(stream => value => console.log(value));
 //
 
-myStream.write(20, 30, 40, 50, 60, 70, 80);
-let otherStream = myStream.groupFirstCount(3);
-console.log('first 3 numbers:');
-otherStream.first.each(number => console.log(number));
-console.log('rest of numbers:');
-otherStream.rest.each(number => console.log(number));
-// otherStream.first.outValues equals [10, 20, 30]
-// otherStream.rest.outValues equals [50, 60, 70, 80]

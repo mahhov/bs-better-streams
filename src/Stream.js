@@ -85,10 +85,7 @@ class Stream {
     }
 
     repeatCount(count) {
-        return this.to(new Stream(function (value) {
-            for (let i = 0; i < count; i++)
-                this.emit(value);
-        }));
+        return this.repeat(() => count);
     }
 
     flatten() {
@@ -140,6 +137,13 @@ class Stream {
             index < count ? 'first' : 'rest');
     }
 
+    groupIndex(...indexes) {
+        return this.group((value, index) => {
+            let groupIndex = indexes.findIndex(indexSet => indexSet.includes(index));
+            return groupIndex !== -1 ? groupIndex : 'rest';
+        });
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -155,4 +159,3 @@ module.exports = Stream;
 // stopon
 // generating
 // while/until loops
-// group index (stream.groupIndex([0,5,6], [1,4,7], [2,3]) would return in 4 streams (named 0, 1, 2, and rest) with sizes 3, 3, 2, and n - 7 

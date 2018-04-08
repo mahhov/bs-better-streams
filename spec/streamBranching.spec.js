@@ -67,4 +67,14 @@ describe('branching', () => {
         expect(s2.first.outValues).toEqual([0, 1, 2, 3]);
         expect(s2.rest.outValues).toEqual([4, 5, 6, 7, 8, 9]);
     });
+
+    it('groupIndex', () => {
+        let s2 = s.groupIndex([0, 5, 6], [1, 4, 7], [2, 8]);
+        s.write(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        expect(s2[0].outValues).toEqual([0, 5, 6]);
+        expect(s2[1].outValues).toEqual([1, 4, 7]);
+        expect(s2[2].outValues).toEqual([2, 8]);
+        expect(s2.rest.outValues).toEqual([3, 9]);
+    });
 });
