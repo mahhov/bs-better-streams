@@ -44,6 +44,7 @@ describe('control', () => {
     it('if', () => {
         let ifStreams = s.if(value => value < 15);
         s.write(12, 16, 14, 13, 17, 15);
+        expect(s.outValues).toEqual([12, 16, 14, 13, 17, 15]);
         expect(ifStreams.then.outValues).toEqual([12, 14, 13]);
         expect(ifStreams.else.outValues).toEqual([16, 17, 15]);
     });
