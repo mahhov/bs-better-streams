@@ -176,6 +176,16 @@ class Stream {
         });
     }
 
+    batch(count) {
+        let buffer = [];
+        return this.to(new Stream(function (value) {
+            if (buffer.push(value) >= count) {
+                this.emit(buffer);
+                buffer = [];
+            }
+        }));
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -187,10 +197,9 @@ module.exports = Stream;
 // elseif
 // for n
 // for iterate
-// on
-// stopon
+// on / trigger
+// stopOn
 // while/until loops
-// batch
 // syntax for if / group by
 // rate
 // lazy loading

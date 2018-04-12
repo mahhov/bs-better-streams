@@ -97,4 +97,11 @@ describe('control', () => {
         expect(s2[2].outValues).toEqual([2, 8]);
         expect(s2.rest.outValues).toEqual([3, 9]);
     });
+
+    it('batch', () => {
+        let s2 = s.batch(3);
+        s.write(0, 1, 2, 3, 4, 5, 6, 7);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+        expect(s2.outValues).toEqual([[0, 1, 2], [3, 4, 5]]);
+    });
 });

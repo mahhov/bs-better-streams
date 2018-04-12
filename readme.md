@@ -113,10 +113,10 @@ myStream.write(5, 6);
 ### to
 
 ```js
-myStream.to(otherStream);
+myStream.to(outStream);
 myStream.write(1, 2);
-otherStream.write(3, 4);
-// otherStream.outValues equals [1, 2, 3, 4]
+outStream.write(3, 4);
+// outStream.outValues equals [1, 2, 3, 4]
 ```
 
 ### await
@@ -126,11 +126,11 @@ myStream.write(Promise.resolve('stream'));
 myStream.write(Promise.resolve('async'));
 myStream.write(Promise.resolve('data'));
 myStream.write(Promise.reject('rejected'));
-let otherStream = myStream.wait();
+let outStream = myStream.wait();
 myStream.write(Promise.resolve('without needing'));
 myStream.write(Promise.resolve('async/await'));
 myStream.write(Promise.resolve('or .then'));
-// otherStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
+// outStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
 ```
 
 ### if
@@ -212,20 +212,28 @@ console.log('other numbers:');
 groupStreams.rest.each(number => console.log(number));
 ```
 
+### batch
+
+```js
+myStream.write(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
+let outStream = myStream.batch(4);
+// outStream.outValues equals [[0, 10, 20, 30], [40, 50, 60, 70]]
+```
+
 ### generate
 
 ```js
 myStream.write(10, 40);
-let otherStream = myStream.generate(value => [value + 1, value * 2]);
-// otherStream.outValues equals [10, 11, 20, 40, 41, 80]
+let outStream = myStream.generate(value => [value + 1, value * 2]);
+// outStream.outValues equals [10, 11, 20, 40, 41, 80]
 ```
 
 ### flatMap
 
 ```js
 myStream.write(10, 40);
-let otherStream = myStream.flatMap(value => [value + 1, value * 2]);
-// otherStream.outValues equals [11, 20, 41, 80]
+let outStream = myStream.flatMap(value => [value + 1, value * 2]);
+// outStream.outValues equals [11, 20, 41, 80]
 ```
 
 ### length
