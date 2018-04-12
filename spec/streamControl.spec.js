@@ -61,12 +61,31 @@ describe('control', () => {
         expect(s3['1x'].outValues).toEqual([1, 3, 5, 7, 9]);
     });
 
+    it('groupCount', () => {
+        let s2 = s.groupCount(3);
+        s.write(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        expect(s2.group0.outValues).toEqual([0, 1, 2]);
+        expect(s2.group1.outValues).toEqual([3, 4, 5]);
+        expect(s2.group2.outValues).toEqual([6, 7, 8]);
+        expect(s2.group3.outValues).toEqual([9]);
+    });
+
     it('groupFirstCount', () => {
         let s2 = s.groupFirstCount(4);
         s.write(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
         expect(s2.first.outValues).toEqual([0, 1, 2, 3]);
         expect(s2.rest.outValues).toEqual([4, 5, 6, 7, 8, 9]);
+    });
+
+    it('groupNCount', () => {
+        let s2 = s.groupNCount(3, 2);
+        s.write(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        expect(s2.group0.outValues).toEqual([0, 1, 2]);
+        expect(s2.group1.outValues).toEqual([3, 4, 5]);
+        expect(s2.rest.outValues).toEqual([6, 7, 8, 9]);
     });
 
     it('groupIndex', () => {

@@ -21,33 +21,33 @@ let myStream = new Stream();
 
 // syntax 1
 
-// myStream.write(110, 10, 30, 130, 50, 150);
-// let ifStreams = myStream.if(value => value > 100);
-//
-// let outThen = ifStreams.then.map(value => value * 2);
-// let outElse = ifStreams.else.map(value => value * 3);
-// let out = outThen.join(outElse).map(value => value + 5);
-//
-// console.log(out.outValues);
+myStream.write(110, 10, 30, 130, 50, 150);
+let ifStreams = myStream.if(value => value > 100);
+
+let outThen = ifStreams.then.map(value => value * 2);
+let outElse = ifStreams.else.map(value => value * 3);
+let out = outThen.join(outElse).map(value => value + 5);
+
+console.log(out.outValues);
 
 
 // syntax 2
 
-// myStream.write(110, 10, 30, 130, 50, 150);
-//
-// let out = myStream
-//     .if(value => value > 100)
-//     .then(stream => stream
-//         .map(value => value * 2))
-//     .elseif(value => value === 100)
-//     .then(stream => stream
-//         .map(value => 1000))
-//     .else(stream => stream
-//         .map(value => value * 3))
-//     .done()
-//     .map(x => x + 5);
-//
-// console.log(out.outValues);
+myStream.write(110, 10, 30, 130, 50, 150);
+
+let out = myStream
+    .if(value => value > 100)
+    .then(stream => stream
+        .map(value => value * 2))
+    .elseif(value => value === 100)
+    .then(stream => stream
+        .map(value => 1000))
+    .else(stream => stream
+        .map(value => value * 3))
+    .done()
+    .map(x => x + 5);
+
+console.log(out.outValues);
 
 
 // // syntax 3

@@ -152,9 +152,21 @@ class Stream {
         return groups;
     }
 
+    groupCount(count) {
+        return this.group((value, index) =>
+            `group${parseInt(index / count)}`);
+    }
+
     groupFirstCount(count) {
         return this.group((value, index) =>
             index < count ? 'first' : 'rest');
+    }
+
+    groupNCount(count, n) {
+        return this.group((value, index) => {
+            let group = parseInt(index / count);
+            return group < n ? `group${group}` : 'rest';
+        });
     }
 
     groupIndex(...indexesSet) {
@@ -178,3 +190,7 @@ module.exports = Stream;
 // on
 // stopon
 // while/until loops
+// batch
+// syntax for if / group by
+// rate
+// lazy loading

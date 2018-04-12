@@ -159,6 +159,16 @@ species.dog.each(dog => console.log('  ', dog.name));
 // species.dogs.outValues equals [{species: 'dog', name: 'orange'}]
 ```
 
+### groupCount
+
+```js
+myStream.write(20, 30, 40, 50, 60, 70, 80);
+let groupStreams = myStream.groupCount(3);
+// groupStreams.group0.outValues equals [20, 30, 40]
+// groupStreams.group1.outValues equals [50, 60, 70]
+// groupStreams.group2.outValues equals [80]
+```
+
 ### groupFirstCount
 
 ```js
@@ -170,6 +180,16 @@ console.log('rest of numbers:');
 groupStreams.rest.each(number => console.log(number));
 // groupStreams.first.outValues equals [10, 20, 30]
 // groupStreams.rest.outValues equals [50, 60, 70, 80]
+```
+
+### groupNCount
+
+```js
+myStream.write(20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120);
+let groupStreams = myStream.groupCount(3, 2);
+// groupStreams.group0.outValues equals [20, 30, 40]
+// groupStreams.group1.outValues equals [50, 60, 70]
+// groupStreams.rest.outValues equals [80, 90, 100, 110, 120]
 ```
 
 ### groupIndex
