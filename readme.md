@@ -138,12 +138,13 @@ myStream.write(Promise.resolve('or .then'));
 ```js
 myStream.write(110, 10, 30, 130, 50, 150);
 let ifStreams = myStream.if(value => value > 100);
+// ifStreams.then.outValues equals [110, 130, 150]
+// ifStreams.else.outValues equals [10, 30, 50]
+
 console.log('numbers over 100:');
 ifStreams.then.each(value => console.log(value));
 console.log('numbers under 100:');
 ifStreams.else.each(value => console.log(value));
-// ifStreams.then.outValues equals [110, 130, 150]
-// ifStreams.else.outValues equals [10, 30, 50]
 ```
 
 ### group
@@ -151,12 +152,13 @@ ifStreams.else.each(value => console.log(value));
 ```js
 myStream.write({species: 'cat', name: 'blue'}, {species: 'cat', name: 'green'}, {species: 'dog', name: 'orange'});
 let species = myStream.group(animal => animal.species);
+// species.cats.outValues equals [{species: 'cat', name: 'blue'}, {species: 'cat', name: 'green'}]
+// species.dogs.outValues equals [{species: 'dog', name: 'orange'}]
+
 console.log('cats:');
 species.cat.each(cat => console.log('  ', cat.name));
 console.log('dogs:');
 species.dog.each(dog => console.log('  ', dog.name));
-// species.cats.outValues equals [{species: 'cat', name: 'blue'}, {species: 'cat', name: 'green'}]
-// species.dogs.outValues equals [{species: 'dog', name: 'orange'}]
 ```
 
 ### groupCount
@@ -174,12 +176,13 @@ let groupStreams = myStream.groupCount(3);
 ```js
 myStream.write(20, 30, 40, 50, 60, 70, 80);
 let groupStreams = myStream.groupFirstCount(3);
+// groupStreams.first.outValues equals [10, 20, 30]
+// groupStreams.rest.outValues equals [50, 60, 70, 80]
+
 console.log('first 3 numbers:');
 groupStreams.first.each(number => console.log(number));
 console.log('rest of numbers:');
 groupStreams.rest.each(number => console.log(number));
-// groupStreams.first.outValues equals [10, 20, 30]
-// groupStreams.rest.outValues equals [50, 60, 70, 80]
 ```
 
 ### groupNCount
@@ -197,15 +200,16 @@ let groupStreams = myStream.groupCount(3, 2);
 ```js
 myStream.write(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
 let groupStreams = myStream.groupIndex([0], [1, 3, 5, 6]);
+// groupStreams[0].outValues equals [0]
+// groupStreams[1].outValues equals [10, 30, 50, 60]
+// groupStreams.rest.outValues equals [20, 40, 70, 80, 90, 100]
+
 console.log('first number:');
 groupStreams[0].each(number => console.log(number));
 console.log('important numbers:');
 groupStreams[1].each(number => console.log(number));
 console.log('other numbers:');
 groupStreams.rest.each(number => console.log(number));
-// groupStreams[0].outValues equals [0]
-// groupStreams[1].outValues equals [10, 30, 50, 60]
-// groupStreams.rest.outValues equals [20, 40, 70, 80, 90, 100]
 ```
 
 ### generate
