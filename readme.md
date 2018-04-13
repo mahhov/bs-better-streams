@@ -247,7 +247,9 @@ throttled.stream
     .each(throttled.next);
 ```
 
-After calling `throttled = stream.throttle(2)`, `throtled.stream` will emit n values initially. It will emit 1 more value each time `throttled.next()` is inovked, and `m` more values each time `throttled.next(m)` is invoked.
+After calling `throttled = stream.throttle(2)`, `throtled.stream` will emit n values initially. It will emit 1 more value each time `throttled.next()` is invoked, and `m` more values each time `throttled.next(m)` is invoked.
+
+Calling `throttled = stream.throttle()` is short for calling `throttled = stream.throttle(0)`, which results in a lazy stream. `throttled.stream` will emit values only when `throttled.next` is invoked.
 
 ### length
 

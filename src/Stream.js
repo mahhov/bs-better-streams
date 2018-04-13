@@ -186,7 +186,7 @@ class Stream {
         }));
     }
 
-    throttle(count) {
+    throttle(count = 0) {
         let queue = [];
 
         let stream = this.to(new Stream(function (value) {
@@ -223,4 +223,3 @@ module.exports = Stream;
 // stopOn
 // while/until loops
 // syntax for if / group by / throttled
-// lazy loading
