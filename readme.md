@@ -249,7 +249,31 @@ throttled.stream
 
 After calling `throttled = stream.throttle(2)`, `throtled.stream` will emit n values initially. It will emit 1 more value each time `throttled.next()` is invoked, and `m` more values each time `throttled.next(m)` is invoked.
 
+```js
+myStream.write(1, 2, 3, 4, 5);
+let throttled = myStream.throttle(2);
+// throttled.stream.outValues equals [1, 2]
+throttled.next(2);
+// throttled.stream.outValues equals [1, 2, 3, 4]
+throttled.next(2);
+// throttled.stream.outValues equals [1, 2, 3, 4, 5]
+myStream.write(6, 7);
+// throttled.stream.outValues equals [1, 2, 3, 4, 5, 6]
+```
+
 Calling `throttled = stream.throttle()` is short for calling `throttled = stream.throttle(0)`, which results in a lazy stream. `throttled.stream` will emit values only when `throttled.next` is invoked.
+
+```js
+myStream.write(1, 2, 3, 4, 5);
+let throttled = myStream.throttle(2);
+// throttled.stream.outValues equals [1, 2]
+throttled.unthrottle();
+// throttled.stream.outValues equals [1, 2, 3, 4, 5]
+myStream.write(6, 7);
+// throttled.stream.outValues equals [1, 2, 3, 4, 5, 6, 7]
+```
+
+Calling `throttled.unthrottle()` will allow all current and future values to pass through without throttling, and rendering `throttled.next()` unnecessary.
 
 ### length
 

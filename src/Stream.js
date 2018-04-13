@@ -188,9 +188,10 @@ class Stream {
 
     throttle(count = 0) {
         let queue = [];
+        let unthrottled;
 
         let stream = this.to(new Stream(function (value) {
-            if (count > 0) {
+            if (count > 0 || unthrottled) {
                 count--;
                 this.emit(value);
             } else
@@ -205,7 +206,15 @@ class Stream {
             }
         };
 
-        return {stream, next}
+        let unthrottle = () => {
+            unthrottled = true;
+            queue.forEach(value => {
+                stream.emit(value)
+            });
+            queue = [];
+        };
+
+        return {stream, next, unthrottle}
     }
 
     get length() {

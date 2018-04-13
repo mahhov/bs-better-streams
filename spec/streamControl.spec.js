@@ -106,35 +106,57 @@ describe('control', () => {
     });
 
     it('throttle', () => {
-        let s2 = s.throttle(2);
+        let throttled = s.throttle(2);
         s.write(1, 2, 3, 4, 5, 6, 7);
-        s2.stream.each(spy1);
+        throttled.stream.each(spy1);
         expect(spy1.calls.allArgs()).toEqual([[1, 0], [2, 1]]);
         spy1.calls.reset();
-        s2.next();
+        throttled.next();
         expect(spy1.calls.allArgs()).toEqual([[3, 2]]);
         spy1.calls.reset();
-        s2.next(2);
+        throttled.next(2);
         expect(spy1.calls.allArgs()).toEqual([[4, 3], [5, 4]]);
         spy1.calls.reset();
-        s2.next(3);
+        throttled.next(3);
         expect(spy1.calls.allArgs()).toEqual([[6, 5], [7, 6]]);
     });
 
     it('throttle with 0 initiall', () => {
-        let s2 = s.throttle();
-        s2.stream.each(spy1);
+        let throttled = s.throttle();
+        s.write(1, 2, 3, 4, 5, 6, 7);
+        throttled.stream.each(spy1);
         expect(spy1).not.toHaveBeenCalled();
-        s2.next(2);
+        throttled.next(2);
         expect(spy1.calls.allArgs()).toEqual([[1, 0], [2, 1]]);
         spy1.calls.reset();
-        s2.next();
+        throttled.next();
         expect(spy1.calls.allArgs()).toEqual([[3, 2]]);
         spy1.calls.reset();
-        s2.next(2);
+        throttled.next(2);
         expect(spy1.calls.allArgs()).toEqual([[4, 3], [5, 4]]);
         spy1.calls.reset();
-        s2.next(3);
+        throttled.next(3);
         expect(spy1.calls.allArgs()).toEqual([[6, 5], [7, 6]]);
+    });
+
+    it('throttle unthrottle', () => {
+        let throttled = s.throttle();
+        s.write(1, 2, 3, 4, 5, 6, 7);
+        throttled.stream.each(spy1);
+        expect(spy1).not.toHaveBeenCalled();
+        throttled.next(2);
+        expect(spy1.calls.allArgs()).toEqual([[1, 0], [2, 1]]);
+        spy1.calls.reset();
+        throttled.unthrottle();
+        expect(spy1.calls.allArgs()).toEqual([[3, 2], [4, 3], [5, 4], [6, 5], [7, 6]]);
+        spy1.calls.reset();
+        s.write(8);
+        expect(spy1.calls.allArgs()).toEqual([[8, 7]]);
+        spy1.calls.reset();
+        throttled.next(2);
+        expect(spy1).not.toHaveBeenCalled();
+        spy1.calls.reset();
+        s.write(9, 10, 11);
+        expect(spy1.calls.allArgs()).toEqual([[9, 8], [10, 9], [11, 10]]);
     });
 });
