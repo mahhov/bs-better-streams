@@ -186,6 +186,27 @@ class Stream {
         }));
     }
 
+    throttle(count) {
+        let queue = [];
+
+        let stream = this.to(new Stream(function (value) {
+            if (count > 0) {
+                count--;
+                this.emit(value);
+            } else
+                queue.push(value);
+        }));
+
+        let next = () => {
+            if (queue.length)
+                stream.emit(queue.shift());
+            else
+                count++;
+        };
+
+        return {stream, next}
+    }
+
     get length() {
         return this.outValues.length; // inputCount?
     }
@@ -200,6 +221,5 @@ module.exports = Stream;
 // on / trigger
 // stopOn
 // while/until loops
-// syntax for if / group by
-// rate
+// syntax for if / group by / throttled
 // lazy loading

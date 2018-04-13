@@ -1,10 +1,19 @@
 const Stream = require('../src/Stream');
 
 let myStream = new Stream();
+let myStream2 = new Stream();
 
-myStream.write(110, 10, 30, 130, 50, 150);
 
-let promiseify = value => 
-    new Promise(resolve => {setTimeout (resolve(value)) });
+let outStream = myStream.join(myStream2);
 
-myStream.rate
+myStream.write(1, 2);
+
+myStream2.write(5, 6);
+
+myStream.write(7)
+
+let ifStreams = outStream.if((x) => x < 5)
+
+console.log('true', ifStreams.then.outValues)
+console.log('false', ifStreams.else.outValues)
+

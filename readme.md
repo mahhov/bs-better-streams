@@ -236,6 +236,17 @@ let outStream = myStream.flatMap(value => [value + 1, value * 2]);
 // outStream.outValues equals [11, 20, 41, 80]
 ```
 
+### throttle
+
+```js
+myStream.write(promise1, promise2, promise3, promise4);
+let throttled = myStream.throttle(2);
+throttled.stream
+    .wait()
+    .each(doStuff)
+    .each(throttled.next);
+```
+
 ### length
 
 `myStream.length`

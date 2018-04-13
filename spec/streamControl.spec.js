@@ -104,4 +104,15 @@ describe('control', () => {
         expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
         expect(s2.outValues).toEqual([[0, 1, 2], [3, 4, 5]]);
     });
+
+    it('throttle', () => {
+        let s2 = s.throttle(2);
+        s.write(1, 2, 3, 4);
+        s2.stream
+            .each(spy1)
+            .map(x => x + 10)
+            .each(spy1)
+            .each(s2.next);
+        expect(spy1.calls.allArgs()).toEqual([[1, 0], [2, 1], [11, 0], [12, 1], [3, 2], [13, 2], [4, 3], [14, 3]]);
+    });
 });
