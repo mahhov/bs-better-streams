@@ -119,7 +119,7 @@ outStream.write(3, 4);
 // outStream.outValues equals [1, 2, 3, 4]
 ```
 
-### await
+### wait
 
 ```js
 myStream.write(Promise.resolve('stream'));
