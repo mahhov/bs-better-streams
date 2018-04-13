@@ -88,30 +88,10 @@ class Stream {
         return this.repeat(() => count);
     }
 
-    // todo group functions catagorically and reflective of specs
     flatten() {
         return this.to(new Stream(function (value) {
             value.forEach(item => {
                 this.emit(item);
-            });
-        }));
-    }
-
-    generate(handler) {
-        return this.to(new Stream(function (value, index) {
-            let values = handler(value, index);
-            this.emit(value);
-            values.forEach(value => {
-                this.emit(value);
-            });
-        }));
-    }
-
-    flatMap(handler) {
-        return this.to(new Stream(function (value, index) {
-            let values = handler(value, index);
-            values.forEach(value => {
-                this.emit(value);
             });
         }));
     }
@@ -183,6 +163,25 @@ class Stream {
                 this.emit(buffer);
                 buffer = [];
             }
+        }));
+    }
+
+    generate(handler) {
+        return this.to(new Stream(function (value, index) {
+            let values = handler(value, index);
+            this.emit(value);
+            values.forEach(value => {
+                this.emit(value);
+            });
+        }));
+    }
+
+    flatMap(handler) {
+        return this.to(new Stream(function (value, index) {
+            let values = handler(value, index);
+            values.forEach(value => {
+                this.emit(value);
+            });
         }));
     }
 
