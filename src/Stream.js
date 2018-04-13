@@ -197,18 +197,19 @@ class Stream {
                 queue.push(value);
         }));
 
-        let next = () => {
-            if (queue.length)
+        let next = (n = 1) => {
+            count += n;
+            while (count > 0 && queue.length) {
+                count--;
                 stream.emit(queue.shift());
-            else
-                count++;
+            }
         };
 
         return {stream, next}
     }
 
     get length() {
-        return this.outValues.length; // inputCount?
+        return this.outValues.length;
     }
 }
 

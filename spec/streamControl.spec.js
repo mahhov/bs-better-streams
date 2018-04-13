@@ -105,14 +105,20 @@ describe('control', () => {
         expect(s2.outValues).toEqual([[0, 1, 2], [3, 4, 5]]);
     });
 
-    it('throttle', () => {
+    fit('throttle', () => {
         let s2 = s.throttle(2);
-        s.write(1, 2, 3, 4);
+        s.write(1, 2, 3, 4, 5, 6, 7);
         s2.stream
-            .each(spy1)
-            .map(x => x + 10)
-            .each(spy1)
-            .each(s2.next);
-        expect(spy1.calls.allArgs()).toEqual([[1, 0], [2, 1], [11, 0], [12, 1], [3, 2], [13, 2], [4, 3], [14, 3]]);
+            .each(spy1);
+        expect(spy1.calls.allArgs()).toEqual([[1, 0], [2, 1]]);
+        spy1.calls.reset();
+        s2.next();
+        expect(spy1.calls.allArgs()).toEqual([[3, 2]]);
+        spy1.calls.reset();
+        s2.next(2);
+        expect(spy1.calls.allArgs()).toEqual([[4, 3], [5, 4]]);
+        spy1.calls.reset();
+        s2.next(3);
+        expect(spy1.calls.allArgs()).toEqual([[6, 5], [7, 6]]);
     });
 });
