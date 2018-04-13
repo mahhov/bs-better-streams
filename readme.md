@@ -73,7 +73,7 @@ myStream.write({key: 'value'});
 ```js
 let outStream = myStream.set('sum', (object, index) =>  object.number + object.otherNumber + index );
 myStream.write({number: 5, otherNumber: 10});
-// outStream.outValues equals [15]
+// outStream.outValues equals [ { number: 5, otherNumber: 10, sum: 15 } ]
 ```
 
 ### repeat
