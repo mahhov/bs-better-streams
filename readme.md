@@ -244,10 +244,10 @@ let throttled = myStream.throttle(2);
 throttled.stream
     .wait()
     .each(doStuff)
-    .each(throttled.next);
+    .each(throttled.nextOne);
 ```
 
-After calling `throttled = stream.throttle(2)`, `throtled.stream` will emit n values initially. It will emit 1 more value each time `throttled.next()` is invoked, and `m` more values each time `throttled.next(m)` is invoked.
+After calling `throttled = stream.throttle(2)`, `throtled.stream` will emit n values initially. It will emit 1 more value each time `throttled.next()` or `throttled.nextOne()` are invoked, and `m` more values each time `throttled.next(m)` is invoked.
 
 ```js
 myStream.write(1, 2, 3, 4, 5);

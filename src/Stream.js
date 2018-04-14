@@ -205,6 +205,10 @@ class Stream {
             }
         };
 
+        let nextOne = () => {
+            next();
+        };
+
         let unthrottle = () => {
             unthrottled = true;
             queue.forEach(value => {
@@ -213,7 +217,7 @@ class Stream {
             queue = [];
         };
 
-        return {stream, next, unthrottle}
+        return {stream, next, nextOne, unthrottle}
     }
 
     get length() {

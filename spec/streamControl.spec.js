@@ -111,7 +111,7 @@ describe('control', () => {
         throttled.stream.each(spy1);
         expect(spy1.calls.allArgs()).toEqual([[1, 0], [2, 1]]);
         spy1.calls.reset();
-        throttled.next();
+        throttled.nextOne();
         expect(spy1.calls.allArgs()).toEqual([[3, 2]]);
         spy1.calls.reset();
         throttled.next(2);
@@ -121,7 +121,7 @@ describe('control', () => {
         expect(spy1.calls.allArgs()).toEqual([[6, 5], [7, 6]]);
     });
 
-    it('throttle with 0 initiall', () => {
+    it('throttle with 0 initial', () => {
         let throttled = s.throttle();
         s.write(1, 2, 3, 4, 5, 6, 7);
         throttled.stream.each(spy1);
