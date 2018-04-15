@@ -24,4 +24,19 @@ describe('async', () => {
             done();
         });
     });
+
+    it('waitOn', done => {
+        let s2 = s.waitOn('key');
+        let promise1 = Promise.resolve(1);
+        let promise2 = Promise.resolve(2);
+        let promise3 = Promise.resolve(3);
+        s.write({key: promise1});
+        s.write({key: promise2});
+        s.write({key: promise3});
+        Promise.all([promise1, promise2, promise3]).then(() => {
+            expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: promise3}]);
+            expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}]);
+            done();
+        });
+    });
 });

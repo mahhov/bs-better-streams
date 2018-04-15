@@ -18,13 +18,15 @@ const Stream = require('../src/Stream');
 // s
 //     .wrap('key')
 //     .set('value', ({key}) => getValue(key))
-//     // .wait('value')
+//     .waitOn('value')
 //     .each(console.log);
 //
 
-
 let myStream = new Stream();
-let outStream = myStream.wrap('key');
-myStream.write('value');
-// outStream.outValues equals [{key: 'value'}]
-console.log(outStream.outValues);
+myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
+let outStream = myStream.waitOn('key2');
+// outStream.outValues equals [{key1: 'value1', key2: 'value2'}
+
+setTimeout(() => {
+    console.log(outStream.outValues);
+}, 100);

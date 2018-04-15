@@ -141,6 +141,14 @@ myStream.write(Promise.resolve('or .then'));
 // outStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
 ```
 
+### waitOn
+
+```js
+myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
+let outStream = myStream.waitOn('key2');
+// outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
+```
+
 ### if
 
 ```js

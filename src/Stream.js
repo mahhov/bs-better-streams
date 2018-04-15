@@ -117,6 +117,17 @@ class Stream {
         }));
     }
 
+    waitOn(name) {
+        return this.to(new Stream(function (value) {
+            value[name].then(resolve => {
+                let waited = Object.assign({}, value);
+                waited[name] = resolve;
+                this.emit(waited);
+            }).catch(() => {
+            });
+        }));
+    }
+
     if(handler) {
         let then = new Stream();
         let els = new Stream();

@@ -34,8 +34,8 @@ describe('grow', () => {
         expect(s.outValues).toEqual([10, 100, 500]);
         expect(s2.outValues).toEqual([10, 20, 30, 100, 200, 300, 500, 1000, 1500]);
     });
-    
-    it('flatMap', function() {
+
+    it('flatMap', () => {
         s.write(10, 100, 500);
         let s2 = s.flatMap(value => [value * 2, value * 3]);
         expect(s.outValues).toEqual([10, 100, 500]);
