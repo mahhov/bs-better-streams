@@ -69,6 +69,14 @@ class Stream {
         }));
     }
 
+    wrap(name) {
+        return this.to(new Stream(function (value) {
+            let wrapped = {};
+            wrapped[name] = value;
+            this.emit(wrapped);
+        }));
+    }
+
     set(name, handler) {
         return this.to(new Stream(function (value, index) {
             value[name] = handler(value, index);

@@ -63,9 +63,17 @@ myStream.write('first', 'second', 'third', 'fourth', 'fifth');
 ### pluck
 
 ```js
-let outStream = myStream.filter('key');
+let outStream = myStream.pluck('key');
 myStream.write({key: 'value'});
 // outStream.outValues equals ['value']
+```
+
+### wrap
+
+```js
+let outStream = myStream.wrap('key');
+myStream.write('value');
+// outStream.outValues equals [{key: 'value'}]
 ```
 
 ### set

@@ -96,6 +96,13 @@ describe('core', () => {
         expect(s2.outValues).toEqual(['value1', 'value2', 'value3', 'value4']);
     });
 
+    it('wrap', () => {
+        let s2 = s.wrap('key');
+        s.write('value1', 'value2', 'value3', 'value4');
+        expect(s.outValues).toEqual(['value1', 'value2', 'value3', 'value4']);
+        expect(s2.outValues).toEqual([{key: 'value1'}, {key: 'value2'}, {key: 'value3'}, {key: 'value4'}]);
+    });
+
     it('set', () => {
         let s2 = s.set('sum', (value, index) => value.number + index);
         s.write({number: 10});
