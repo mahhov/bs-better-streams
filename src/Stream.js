@@ -104,6 +104,17 @@ class Stream {
         }));
     }
 
+    flattenOn(name, nameTo) {
+        return this.to(new Stream(function (value) {
+            value[name].forEach(item => {
+                let flattened = Object.assign({}, value);
+                delete flattened[name];
+                flattened[nameTo] = item;
+                this.emit(flattened);
+            });
+        }));
+    }
+
     join(stream) {
         return stream.to(this.to(new Stream()));
     }

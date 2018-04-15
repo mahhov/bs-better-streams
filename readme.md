@@ -108,6 +108,15 @@ myStream.write([2], [3], [2, 4]);
 // outStream.outValues equals [2, 3, 2, 4]
 ```
 
+### flattenOn
+
+```js
+myStream.write({key1: 'value1', numbers: [1, 2]});
+myStream.write({key1: 'value1b', numbers: [4, 5]});
+let outStream = myStream.flattenOn('numbers', 'number');
+// outStream.outValues equals [{key1: 'value1', number: 1}, {key1: 'value1', number: 2}, {key1: 'value1b', number: 4}, {key1: 'value1b', number: 5}]
+```
+
 ### join
 
 ```js

@@ -122,4 +122,18 @@ describe('core', () => {
         expect(s.outValues).toEqual([[10, 11, 12, 13, 14], [20, 21, 22, 23, 24], [30, 31, 32, 33, 34], [40, 41, 42, 43, 44]]);
         expect(s2.outValues).toEqual([10, 11, 12, 13, 14, 20, 21, 22, 23, 24, 30, 31, 32, 33, 34, 40, 41, 42, 43, 44]);
     });
+
+    it('flattenOn', () => {
+        let s2 = s.flattenOn('names', 'name');
+        s.write({type: 'cat', 'class': 'mammalia', names: ['kitty', 'cupcake']});
+        s.write({type: 'dog', 'class': 'mammalia', names: ['barf', 'brownNose']});
+        expect(s.outValues).toEqual([
+            {type: 'cat', 'class': 'mammalia', names: ['kitty', 'cupcake']},
+            {type: 'dog', 'class': 'mammalia', names: ['barf', 'brownNose']}]);
+        expect(s2.outValues).toEqual([
+            {type: 'cat', class: 'mammalia', name: 'kitty'},
+            {type: 'cat', class: 'mammalia', name: 'cupcake'},
+            {type: 'dog', class: 'mammalia', name: 'barf'},
+            {type: 'dog', class: 'mammalia', name: 'brownNose'}]);
+    });
 });
