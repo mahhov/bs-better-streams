@@ -149,6 +149,43 @@ let outStream = myStream.waitOn('key2');
 // outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
 ```
 
+#### Why is waitOn useful?
+
+imagine we have a set of users
+
+```js
+let users = new Stream();
+users.write({userId: '1', height: 3, color: 'blue'}, {userId: '2', height: 4, color: 'green'}, {userId: '3', height: 2, color: 'orange'});
+```
+
+and this api to obtain a user's shape
+
+```js
+let getUserShape = userId => {
+    return Promise.resolve(userId === 1 ? 'circle' : 'square');
+};
+```
+
+without `waitOn`, we would need to do something like the following in order to include every user's shape
+
+```js
+users
+    .set('shape', ({userId}) => getUserShape(userId))
+    .map(user => user.shape.then(shape => {
+        user.shape = shape;
+        return user;
+    }))
+    .wait();
+```
+
+but with `waitOn`, we can simply do the following
+
+```js
+users
+    .set('shape', ({userId}) => getUserShape(userId))
+    .waitOn('shape');
+```
+
 ### if
 
 ```js
