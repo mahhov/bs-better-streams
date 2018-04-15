@@ -117,6 +117,36 @@ let outStream = myStream.flattenOn('numbers', 'number');
 // outStream.outValues equals [{key1: 'value1', number: 1}, {key1: 'value1', number: 2}, {key1: 'value1b', number: 4}, {key1: 'value1b', number: 5}]
 ```
 
+#### Why is flattenOn useful?
+
+imagine we have a set of animals grouped by species
+
+```js
+let animalSpecies = new Stream();
+animalSpecies.write({species: 'cat', class: 'mammalia', names: ['kitty', 'cupcake']});
+animalSpecies.write({species: 'dog', class: 'mammalia', names: ['barf', 'brownNose']});
+```
+
+without `flattenOn`, we would need to do something like the following in order to obtain a flat list of animals
+
+```js
+animalSpecies
+    .flatMap(animalSpecies =>
+        animalSpecies.names.map(name => {
+            let animal = Object.assign({}, animalSpecies);
+            delete animal.names;
+            animal.name = name;
+            return animal;
+        }));
+```
+
+but with `flattenOn`, we can simply do the following
+
+```js
+animalSpecies
+    .flattenOn('names', 'name');
+```
+
 ### join
 
 ```js
