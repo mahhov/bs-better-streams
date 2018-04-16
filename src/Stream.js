@@ -119,6 +119,19 @@ class Stream {
         return stream.to(this.to(new Stream()));
     }
 
+    product(stream, id, otherId, name) {
+        return this.map(left => {
+            let product = Object.assign({}, left);
+            stream
+                .filter(otherValue => left[id] === otherValue[otherId])
+                .filterCount(1)
+                .each(right => {
+                    product[name] = right;
+                });
+            return product;
+        });
+    }
+
     wait() {
         return this.to(new Stream(function (value) {
             value.then(resolve => {
@@ -265,3 +278,4 @@ module.exports = Stream;
 // stopOn
 // while/until loops
 // syntax for if / group by / throttled
+// product & filterCount & filterIndex to be more efficient

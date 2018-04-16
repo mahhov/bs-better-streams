@@ -157,6 +157,15 @@ myStream.write(5, 6);
 // outStream.outValues equals [1, 2, 3, 4, 5, 6]
 ```
 
+### product
+
+```js
+let productStream = myStream.product(otherStream, 'myId', 'otherId', 'other');
+myStream.write({myId: 1, myValue: 10}, {myId: 2, myValue: 20});
+otherStream.write({otherId: 1, otherValue: 100}, {otherId: 3, otherValue: 300});
+// productStream.outValues equals [{myId: 1, myValue: 10, other: {otherId: 1, otherValue: 100}}, {myId: 2, myValue: 20}]
+```
+
 ### to
 
 ```js

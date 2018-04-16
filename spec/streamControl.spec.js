@@ -41,6 +41,23 @@ describe('control', () => {
         expect(s3.outValues).toEqual([10, 11, 12, 13, 14, 15, 16, 17]);
     });
 
+    it('product', () => {
+        let s2 = stream();
+        let s3 = s.product(s2, 'id', 'id2', 'match');
+        s.write({id: 1, value: 3});
+        s.write({id: 2, value: 6});
+        s.write({id: 3, value: 9});
+        s2.write({id2: 1, value: 10});
+        s2.write({id2: 2, value: 20});
+        s2.write({id2: 4, value: 40});
+        expect(s.outValues).toEqual([{id: 1, value: 3}, {id: 2, value: 6}, {id: 3, value: 9}]);
+        expect(s2.outValues).toEqual([{id2: 1, value: 10}, {id2: 2, value: 20}, {id2: 4, value: 40}]);
+        expect(s3.outValues).toEqual([
+            {id: 1, value: 3, match: {id2: 1, value: 10}},
+            {id: 2, value: 6, match: {id2: 2, value: 20}},
+            {id: 3, value: 9}]);
+    });
+
     it('if', () => {
         let ifStreams = s.if(value => value < 15);
         s.write(12, 16, 14, 13, 17, 15);
