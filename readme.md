@@ -15,15 +15,15 @@ myStream.write(11, 21, 31);
 
 ## Overview
 
-### write
+### write (...values)
 
 `myStream.write(10, 20, 30);`
 
-### write array
+### write array ([array of values])
 
 `myStream.write(...[10, 20, 30]);`
 
-### write promise
+### write promise (...promises)
 
 ```js
 let promise1 = Promise.resolve('i hate `.then`s');
@@ -32,19 +32,19 @@ myStream.writePromise(promise1, promise2);
 // myStream.outValues equals [10]
 ```
 
-### each
+### each (handler)
 
 `myStream.each( (value, index) => doOperation(value, index) );`
 
-### map
+### map (handler)
 
 `myStream.map( (value, index) => value * index );`
 
-### filter
+### filter (predicateHandler)
 
 `myStream.filter( (value, index) => value > index );`
 
-### filterCount
+### filterCount (integer)
 
 ```js
 let outStream = myStream.filterCount(3);
@@ -52,7 +52,7 @@ myStream.write('first', 'second', 'third', 'fourth', 'fifth');
 // outStream.outValues equals [first, second, third]
 ```
 
-### filterIndex
+### filterIndex ([array of indices])
 
 ```js
 let outStream = myStream.filterIndex([0, 2, 3]);
@@ -60,7 +60,7 @@ myStream.write('first', 'second', 'third', 'fourth', 'fifth');
 // outStream.outValues equals [first, third, fourth]
 ```
 
-### pluck
+### pluck (keyName)
 
 ```js
 let outStream = myStream.pluck('key');
@@ -68,7 +68,7 @@ myStream.write({key: 'value'});
 // outStream.outValues equals ['value']
 ```
 
-### wrap
+### wrap (keyName)
 
 ```js
 let outStream = myStream.wrap('key');
@@ -76,7 +76,7 @@ myStream.write('value');
 // outStream.outValues equals [{key: 'value'}]
 ```
 
-### set
+### set (keyName, handler)
 
 ```js
 let outStream = myStream.set('sum', (object, index) =>  object.number + object.otherNumber + index );
@@ -84,7 +84,7 @@ myStream.write({number: 5, otherNumber: 10});
 // outStream.outValues equals [ { number: 5, otherNumber: 10, sum: 15 } ]
 ```
 
-### repeat
+### repeat (handler)
 
 ```js
 let outStream = myStream.repeat( (value, index) =>  value + index );
@@ -92,7 +92,7 @@ myStream.write(2, 3, 2);
 // outStream.outValues equals [2, 2, 3, 3, 3, 3, 2, 2, 2, 2]
 ```
 
-### repeatCount
+### repeatCount (integer)
 
 ```js
 let outStream = myStream.repeatCount(2);
@@ -100,7 +100,7 @@ myStream.write(2, 3, 2);
 // outStream.outValues equals [2, 2, 3, 3, 2, 2]
 ```
 
-### flatten
+### flatten ()
 
 ```js
 let outStream = myStream.flatten();
@@ -108,7 +108,7 @@ myStream.write([2], [3], [2, 4]);
 // outStream.outValues equals [2, 3, 2, 4]
 ```
 
-### flattenOn
+### flattenOn (listKeyName, newKeyName)
 
 ```js
 myStream.write({key1: 'value1', numbers: [1, 2]});
@@ -147,7 +147,7 @@ animalSpecies
     .flattenOn('names', 'name');
 ```
 
-### join
+### join (stream)
 
 ```js
 let outStream = myStream.join(otherStream);
@@ -157,7 +157,7 @@ myStream.write(5, 6);
 // outStream.outValues equals [1, 2, 3, 4, 5, 6]
 ```
 
-### product
+### product (rightStream, leftStreamIdKey, rightStreamIdKey, leftStreamSetKey)
 
 ```js
 let productStream = myStream.product(otherStream, 'myId', 'otherId', 'other');
@@ -173,7 +173,7 @@ otherStream.write({otherId: 3, otherValue: 30});
 //                                 {myId: 2, myValue: 201, other: {otherId: 2, otherValue: 21}}]
 ```
 
-### productX
+### productX (rightStream, leftStreamIdHandler, rightStreamIdHandler, handler)
 
 ```js
 myStream.productX(otherStream, ({myId}) => myId, ({otherId}) => otherId, (left, right) => {
@@ -192,7 +192,7 @@ otherStream.write({otherId: 3, otherValue: 30});
 
 Note that while `product` modifies a copy of left stream's values, leaving left stream unmodified; `productX` passes in the original values of left stream, allowing left stream to be modified by the handler as seen in the example above.
 
-### to
+### to (stream)
 
 ```js
 myStream.to(outStream);
@@ -201,7 +201,7 @@ outStream.write(3, 4);
 // outStream.outValues equals [1, 2, 3, 4]
 ```
 
-### wait
+### wait ()
 
 ```js
 myStream.write(Promise.resolve('stream'));
@@ -215,7 +215,7 @@ myStream.write(Promise.resolve('or .then'));
 // outStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
 ```
 
-### waitOn
+### waitOn (key)
 
 ```js
 myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
@@ -260,7 +260,7 @@ users
     .waitOn('shape');
 ```
 
-### if
+### if (predicateHandler)
 
 ```js
 myStream.write(110, 10, 30, 130, 50, 150);
@@ -274,7 +274,7 @@ console.log('numbers under 100:');
 ifStreams.else.each(value => console.log(value));
 ```
 
-### group
+### group (handler)
 
 ```js
 myStream.write({species: 'cat', name: 'blue'}, {species: 'cat', name: 'green'}, {species: 'dog', name: 'orange'});
@@ -288,7 +288,7 @@ console.log('dogs:');
 species.dog.each(dog => console.log('  ', dog.name));
 ```
 
-### groupCount
+### groupCount (integerGroupSize)
 
 ```js
 myStream.write(20, 30, 40, 50, 60, 70, 80);
@@ -298,7 +298,7 @@ let groupStreams = myStream.groupCount(3);
 // groupStreams.group2.outValues equals [80]
 ```
 
-### groupFirstCount
+### groupFirstCount (integerGroupSize)
 
 ```js
 myStream.write(20, 30, 40, 50, 60, 70, 80);
@@ -312,7 +312,7 @@ console.log('rest of numbers:');
 groupStreams.rest.each(number => console.log(number));
 ```
 
-### groupNCount
+### groupNCount (integerGroupSize, integerGroupCount)
 
 ```js
 myStream.write(20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120);
@@ -322,7 +322,7 @@ let groupStreams = myStream.groupCount(3, 2);
 // groupStreams.rest.outValues equals [80, 90, 100, 110, 120]
 ```
 
-### groupIndex
+### groupIndex (...[lists of indices])
 
 ```js
 myStream.write(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
@@ -339,7 +339,7 @@ console.log('other numbers:');
 groupStreams.rest.each(number => console.log(number));
 ```
 
-### batch
+### batch (integerBatchSize)
 
 ```js
 myStream.write(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100);
@@ -347,7 +347,7 @@ let outStream = myStream.batch(4);
 // outStream.outValues equals [[0, 10, 20, 30], [40, 50, 60, 70]]
 ```
 
-### generate
+### generate (handler)
 
 ```js
 myStream.write(10, 40);
@@ -355,7 +355,7 @@ let outStream = myStream.generate(value => [value + 1, value * 2]);
 // outStream.outValues equals [10, 11, 20, 40, 41, 80]
 ```
 
-### flatMap
+### flatMap (handler)
 
 ```js
 myStream.write(10, 40);
@@ -363,7 +363,7 @@ let outStream = myStream.flatMap(value => [value + 1, value * 2]);
 // outStream.outValues equals [11, 20, 41, 80]
 ```
 
-### throttle
+### throttle (integer)
 
 ```js
 myStream.write(promise1, promise2, promise3, promise4);
