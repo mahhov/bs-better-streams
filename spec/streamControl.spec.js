@@ -112,13 +112,13 @@ describe('control', () => {
         s2.write({id2: 8, id3: 2, value: 61});
 
         expect(s.outValues).toEqual([
-            {id: 2, id2: -1, value: 100},
-            {id: 4, id2: -2, value: 200},
-            {id: 5, id2: -3, value: 201},
-            {id: 7, id2: -4, value: 300},
+            {id: 2, id2: -1, value: 100, rightValue: 10},
+            {id: 4, id2: -2, value: 200, rightValue: 20},
+            {id: 5, id2: -3, value: 201, rightValue: 20},
+            {id: 7, id2: -4, value: 300, rightValue: 31},
             {id: 9, id2: -5, value: 400},
-            {id: 12, id2: -6, value: 600},
-            {id: 13, id2: -7, value: 601},
+            {id: 12, id2: -6, value: 600, rightValue: 61},
+            {id: 13, id2: -7, value: 601, rightValue: 61},
         ]);
         expect(s2.outValues).toEqual([
             {id2: 3, id3: 2, value: 10},
@@ -133,10 +133,10 @@ describe('control', () => {
             {id: 2, id2: -1, value: 100, rightValue: 10},
             {id: 4, id2: -2, value: 200, rightValue: 20},
             {id: 5, id2: -3, value: 201, rightValue: 20},
-            {id: 7, id2: -4, value: 300, rightValue: 30},
             {id: 7, id2: -4, value: 300, rightValue: 31},
-            {id: 12, id2: -6, value: 600, rightValue: 60},
-            {id: 13, id2: -7, value: 601, rightValue: 60},
+            {id: 7, id2: -4, value: 300, rightValue: 31},
+            {id: 12, id2: -6, value: 600, rightValue: 61},
+            {id: 13, id2: -7, value: 601, rightValue: 61},
             {id: 12, id2: -6, value: 600, rightValue: 61},
             {id: 13, id2: -7, value: 601, rightValue: 61}
         ]);

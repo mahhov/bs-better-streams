@@ -136,8 +136,7 @@ class Stream {
             rightStream
                 .filter(right => leftIdHandler(left) === rightIdHandler(right))
                 .each(right => {
-                    let leftCopy = Object.assign({}, left);
-                    this.emit(productHandler(leftCopy, right));
+                    this.emit(productHandler(left, right));
                 });
         }));
     }
