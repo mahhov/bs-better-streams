@@ -90,6 +90,58 @@ describe('control', () => {
         ]);
     });
 
+    it('productX', () => {
+        let s2 = stream();
+        let s3 = s.productX(s2, ({id, id2}) => id + id2, ({id2, id3}) => id2 - id3, (left, {value}) => {
+            left.rightValue = value;
+            return left;
+        });
+        s.write({id: 2, id2: -1, value: 100});
+        s.write({id: 4, id2: -2, value: 200});
+        s.write({id: 5, id2: -3, value: 201});
+        s.write({id: 7, id2: -4, value: 300});
+        s.write({id: 9, id2: -5, value: 400});
+        s.write({id: 12, id2: -6, value: 600});
+        s.write({id: 13, id2: -7, value: 601});
+        s2.write({id2: 3, id3: 2, value: 10});
+        s2.write({id2: 4, id3: 2, value: 20});
+        s2.write({id2: 5, id3: 2, value: 30});
+        s2.write({id2: 5, id3: 2, value: 31});
+        s2.write({id2: 7, id3: 2, value: 50});
+        s2.write({id2: 8, id3: 2, value: 60});
+        s2.write({id2: 8, id3: 2, value: 61});
+
+        expect(s.outValues).toEqual([
+            {id: 2, id2: -1, value: 100},
+            {id: 4, id2: -2, value: 200},
+            {id: 5, id2: -3, value: 201},
+            {id: 7, id2: -4, value: 300},
+            {id: 9, id2: -5, value: 400},
+            {id: 12, id2: -6, value: 600},
+            {id: 13, id2: -7, value: 601},
+        ]);
+        expect(s2.outValues).toEqual([
+            {id2: 3, id3: 2, value: 10},
+            {id2: 4, id3: 2, value: 20},
+            {id2: 5, id3: 2, value: 30},
+            {id2: 5, id3: 2, value: 31},
+            {id2: 7, id3: 2, value: 50},
+            {id2: 8, id3: 2, value: 60},
+            {id2: 8, id3: 2, value: 61}
+        ]);
+        expect(s3.outValues).toEqual([
+            {id: 2, id2: -1, value: 100, rightValue: 10},
+            {id: 4, id2: -2, value: 200, rightValue: 20},
+            {id: 5, id2: -3, value: 201, rightValue: 20},
+            {id: 7, id2: -4, value: 300, rightValue: 30},
+            {id: 7, id2: -4, value: 300, rightValue: 31},
+            {id: 12, id2: -6, value: 600, rightValue: 60},
+            {id: 13, id2: -7, value: 601, rightValue: 60},
+            {id: 12, id2: -6, value: 600, rightValue: 61},
+            {id: 13, id2: -7, value: 601, rightValue: 61}
+        ]);
+    });
+
     it('if', () => {
         let ifStreams = s.if(value => value < 15);
         s.write(12, 16, 14, 13, 17, 15);

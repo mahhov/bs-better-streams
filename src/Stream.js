@@ -119,14 +119,25 @@ class Stream {
         return stream.to(this.to(new Stream()));
     }
 
-    product(stream, id, otherId, name) {
+    product(stream, leftId, rightId, name) {
         return this.to(new Stream(function (left) {
             stream
-                .filter(right => left[id] === right[otherId])
+                .filter(right => left[leftId] === right[rightId])
                 .each(right => {
                     let product = Object.assign({}, left);
                     product[name] = right;
                     this.emit(product);
+                });
+        }));
+    }
+
+    productX(rightStream, leftIdHandler, rightIdHandler, productHandler) {
+        return this.to(new Stream(function (left) {
+            rightStream
+                .filter(right => leftIdHandler(left) === rightIdHandler(right))
+                .each(right => {
+                    let leftCopy = Object.assign({}, left);
+                    this.emit(productHandler(leftCopy, right));
                 });
         }));
     }
