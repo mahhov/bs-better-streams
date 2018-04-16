@@ -161,9 +161,16 @@ myStream.write(5, 6);
 
 ```js
 let productStream = myStream.product(otherStream, 'myId', 'otherId', 'other');
-myStream.write({myId: 1, myValue: 10}, {myId: 2, myValue: 20});
-otherStream.write({otherId: 1, otherValue: 100}, {otherId: 3, otherValue: 300});
-// productStream.outValues equals [{myId: 1, myValue: 10, other: {otherId: 1, otherValue: 100}}, {myId: 2, myValue: 20}]
+myStream.write({myId: 1, myValue: 100});
+myStream.write({myId: 2, myValue: 200});
+myStream.write({myId: 2, myValue: 201});
+otherStream.write({otherId: 2, otherValue: 20});
+otherStream.write({otherId: 2, otherValue: 21});
+otherStream.write({otherId: 3, otherValue: 30});
+// productStream.outValues equals [{myId: 2, myValue: 200, other: {otherId: 2, otherValue: 20}},
+//                                 {myId: 2, myValue: 201, other: {otherId: 2, otherValue: 20}},
+//                                 {myId: 2, myValue: 200, other: {otherId: 2, otherValue: 21}},
+//                                 {myId: 2, myValue: 201, other: {otherId: 2, otherValue: 21}}]
 ```
 
 ### to

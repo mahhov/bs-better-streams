@@ -120,16 +120,15 @@ class Stream {
     }
 
     product(stream, id, otherId, name) {
-        return this.map(left => {
-            let product = Object.assign({}, left);
+        return this.to(new Stream(function (left) {
             stream
-                .filter(otherValue => left[id] === otherValue[otherId])
-                .filterCount(1)
+                .filter(right => left[id] === right[otherId])
                 .each(right => {
+                    let product = Object.assign({}, left);
                     product[name] = right;
+                    this.emit(product);
                 });
-            return product;
-        });
+        }));
     }
 
     wait() {

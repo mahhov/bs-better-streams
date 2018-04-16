@@ -44,18 +44,50 @@ describe('control', () => {
     it('product', () => {
         let s2 = stream();
         let s3 = s.product(s2, 'id', 'id2', 'match');
-        s.write({id: 1, value: 3});
-        s.write({id: 2, value: 6});
-        s.write({id: 3, value: 9});
+        s.write({id: 1, value: 100});
+        s.write({id: 2, value: 200});
+        s.write({id: 2, value: 201});
+        s.write({id: 3, value: 300});
+        s.write({id: 4, value: 400});
+        s.write({id: 6, value: 600});
+        s.write({id: 6, value: 601});
         s2.write({id2: 1, value: 10});
         s2.write({id2: 2, value: 20});
-        s2.write({id2: 4, value: 40});
-        expect(s.outValues).toEqual([{id: 1, value: 3}, {id: 2, value: 6}, {id: 3, value: 9}]);
-        expect(s2.outValues).toEqual([{id2: 1, value: 10}, {id2: 2, value: 20}, {id2: 4, value: 40}]);
+        s2.write({id2: 3, value: 30});
+        s2.write({id2: 3, value: 31});
+        s2.write({id2: 5, value: 50});
+        s2.write({id2: 6, value: 60});
+        s2.write({id2: 6, value: 61});
+
+        expect(s.outValues).toEqual([
+            {id: 1, value: 100},
+            {id: 2, value: 200},
+            {id: 2, value: 201},
+            {id: 3, value: 300},
+            {id: 4, value: 400},
+            {id: 6, value: 600},
+            {id: 6, value: 601},
+        ]);
+        expect(s2.outValues).toEqual([
+            {id2: 1, value: 10},
+            {id2: 2, value: 20},
+            {id2: 3, value: 30},
+            {id2: 3, value: 31},
+            {id2: 5, value: 50},
+            {id2: 6, value: 60},
+            {id2: 6, value: 61}
+        ]);
         expect(s3.outValues).toEqual([
-            {id: 1, value: 3, match: {id2: 1, value: 10}},
-            {id: 2, value: 6, match: {id2: 2, value: 20}},
-            {id: 3, value: 9}]);
+            {id: 1, value: 100, match: {id2: 1, value: 10}},
+            {id: 2, value: 200, match: {id2: 2, value: 20}},
+            {id: 2, value: 201, match: {id2: 2, value: 20}},
+            {id: 3, value: 300, match: {id2: 3, value: 30}},
+            {id: 3, value: 300, match: {id2: 3, value: 31}},
+            {id: 6, value: 600, match: {id2: 6, value: 60}},
+            {id: 6, value: 601, match: {id2: 6, value: 60}},
+            {id: 6, value: 600, match: {id2: 6, value: 61}},
+            {id: 6, value: 601, match: {id2: 6, value: 61}}
+        ]);
     });
 
     it('if', () => {
