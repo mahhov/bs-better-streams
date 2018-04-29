@@ -68,6 +68,29 @@ myStream.write(0, 1, 1, 0, 2, 3, 2, 3);
 // outStream.outValues equals [0, 1, 2, 3]
 ```
 
+### uniqueOn ()
+
+```js
+let outStream = myStream.uniqueOn('name');
+myStream.write(
+    {age: 4231, name: 'Odysseus'},
+    {age: 4250, name: 'Odysseus'},
+    {age: 4234, name: 'Helen'});
+// outStream.outValues equals [{age: 4231, name: 'Odysseus'},
+//                             {age: 4234, name: 'Helen'}]
+```
+
+### uniqueX ()
+
+```js
+let outStream = myStream.uniqueX(obj => obj.a + obj.b);
+myStream.write(
+    {a: 1, b: 5},
+    {a: 2, b: 4},
+    {a: 3, b: 3});
+// outStream.outValues equals [{a: 1, b: 5}]
+```
+
 ### pluck (keyName)
 
 ```js

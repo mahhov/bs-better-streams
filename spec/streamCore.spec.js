@@ -93,6 +93,68 @@ describe('core', () => {
         expect(s2.outValues).toEqual([1, 2, 3, 4, 5, 6]);
     });
 
+    it('uniqueOn', () => {
+        let s2 = s.uniqueOn('key');
+        s.write(
+            {key: 1, key2: 10},
+            {key: 2, key2: 20},
+            {key: 3, key2: 30},
+            {key: 4, key2: 40},
+            {key: 2, key2: 21},
+            {key: 4, key2: 41},
+            {key: 3, key2: 31},
+            {key: 4, key2: 42},
+            {key: 5, key2: 50},
+            {key: 3, key2: 32},
+            {key: 1, key2: 11},
+            {key: 5, key2: 51},
+            {key: 6, key2: 60},
+            {key: 6, key2: 61});
+        expect(s.outValues).toEqual([
+            {key: 1, key2: 10},
+            {key: 2, key2: 20},
+            {key: 3, key2: 30},
+            {key: 4, key2: 40},
+            {key: 2, key2: 21},
+            {key: 4, key2: 41},
+            {key: 3, key2: 31},
+            {key: 4, key2: 42},
+            {key: 5, key2: 50},
+            {key: 3, key2: 32},
+            {key: 1, key2: 11},
+            {key: 5, key2: 51},
+            {key: 6, key2: 60},
+            {key: 6, key2: 61}]);
+        expect(s2.outValues).toEqual([
+            {key: 1, key2: 10},
+            {key: 2, key2: 20},
+            {key: 3, key2: 30},
+            {key: 4, key2: 40},
+            {key: 5, key2: 50},
+            {key: 6, key2: 60},]);
+    });
+
+    it('uniqueX', () => {
+        let s2 = s.uniqueX(value => value.key + value.key2);
+        s.write(
+            {key: 4, key2: 0},
+            {key: 0, key2: 4},
+            {key: 2, key2: 2},
+            {key: 3, key2: 2},
+            {key: 1, key2: 4},
+            {key: 4, key2: 0});
+        expect(s.outValues).toEqual([
+            {key: 4, key2: 0},
+            {key: 0, key2: 4},
+            {key: 2, key2: 2},
+            {key: 3, key2: 2},
+            {key: 1, key2: 4},
+            {key: 4, key2: 0}]);
+        expect(s2.outValues).toEqual([
+            {key: 4, key2: 0},
+            {key: 3, key2: 2},]);
+    });
+
     it('pluck', () => {
         let s2 = s.pluck('key');
         s.write({key: 'value1'});

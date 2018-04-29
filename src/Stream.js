@@ -68,7 +68,19 @@ class Stream {
             this.outValues.includes(value) || this.emit(value);
         }));
     }
-    
+
+    uniqueOn(name) {
+        return this.to(new Stream(function (value) {
+            this.outValues.some(outValue => outValue[name] === value[name]) || this.emit(value);
+        }));
+    }
+
+    uniqueX(handler) {
+        return this.to(new Stream(function (value) {
+            this.outValues.some(outValue => handler(outValue) === handler(value)) || this.emit(value);
+        }));
+    }
+
     pluck(name) {
         return this.to(new Stream(function (value) {
             this.emit(value[name]);
