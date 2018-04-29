@@ -60,6 +60,14 @@ myStream.write('first', 'second', 'third', 'fourth', 'fifth');
 // outStream.outValues equals [first, third, fourth]
 ```
 
+### unique ()
+
+```js
+let outStream = myStream.unique();
+myStream.write(0, 1, 1, 0, 2, 3, 2, 3);
+// outStream.outValues equals [0, 1, 2, 3]
+```
+
 ### pluck (keyName)
 
 ```js

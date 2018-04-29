@@ -63,6 +63,12 @@ class Stream {
         return this.filter((value, index) => indexes.includes(index));
     }
 
+    unique() {
+        return this.to(new Stream(function (value) {
+            this.outValues.includes(value) || this.emit(value);
+        }));
+    }
+    
     pluck(name) {
         return this.to(new Stream(function (value) {
             this.emit(value[name]);

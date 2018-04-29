@@ -86,6 +86,13 @@ describe('core', () => {
         expect(s2.outValues).toEqual([11, 12]);
     });
 
+    it('unique', () => {
+        let s2 = s.unique();
+        s.write(1, 2, 3, 4, 2, 4, 3, 4, 5, 3, 1, 5, 6, 6);
+        expect(s.outValues).toEqual([1, 2, 3, 4, 2, 4, 3, 4, 5, 3, 1, 5, 6, 6]);
+        expect(s2.outValues).toEqual([1, 2, 3, 4, 5, 6]);
+    });
+
     it('pluck', () => {
         let s2 = s.pluck('key');
         s.write({key: 'value1'});
