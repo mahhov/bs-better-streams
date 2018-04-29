@@ -1,12 +1,17 @@
 const Stream = require('../src/Stream');
 
 let myStream = new Stream();
-let otherStream = new Stream();
 
+let resolve1, resolve2;
+let promise1 = new Promise(resolve => resolve1 = resolve);
+let promise2 = new Promise(resolve => resolve2 = resolve);
+myStream.write(promise1, promise2);
+let outStream = myStream.waitOrdered();
+resolve2('promise 2 resolved first');
+resolve1('promise 1 resolved last');
 
-let outStream = myStream.unique();
-myStream.write(0, 1, 1, 0, 2, 3, 2, 3);
-// outStream.outValues equals [0, 1, 2, 3]
-console.log(outStream.outValues);
+// ['promise 1 resolved last', 'promise 2 resolved first']
 
-console.log(myStream.outValues);
+setTimeout(() => {
+    console.log(outStream.outValues);
+}, 10);

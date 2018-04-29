@@ -179,6 +179,23 @@ class Stream {
         }));
     }
 
+    waitOrdered() {
+        let queue = [];
+        let idle = true;
+        return this.to(new Stream(async function (value) {
+            queue.push(value);
+            if (!idle)
+                return;
+
+            do {
+                let value = queue.shift();
+                let resolve = await value;
+                this.emit(resolve);
+            } while (queue.length);
+            idle = true;
+        }));
+    }
+
     if(handler) {
         let then = new Stream();
         let els = new Stream();

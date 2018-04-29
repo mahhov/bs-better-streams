@@ -39,4 +39,31 @@ describe('async', () => {
             done();
         });
     });
+
+    it('waitOrdered', done => {
+        let s2 = s.waitOrdered();
+        let promiseWrap1 = createPromise();
+        let promiseWrap2 = createPromise();
+        let promiseWrap3 = createPromise();
+        s.write(promiseWrap1.promise);
+        s.write(promiseWrap2.promise);
+        s.write(promiseWrap3.promise);
+        promiseWrap3.resolve(3);
+        promiseWrap2.resolve(2);
+        promiseWrap1.resolve(1);
+        Promise.all([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise, s2.writer()]).then(() => {
+            expect(s.outValues).toEqual([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise]);
+            expect(s2.outValues).toEqual([undefined, 1, 2, 3]);
+            done();
+        });
+    });
+
+    let createPromise = () => {
+        let resolve, reject;
+        let promise = new Promise((resolv, rejec) => {
+            resolve = resolv;
+            reject = rejec;
+        });
+        return {promise, resolve, reject};
+    };
 });
