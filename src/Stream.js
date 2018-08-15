@@ -3,7 +3,7 @@ class Stream {
         this.outValues = [];
         this.inputCount = 0;
         this.next = [];
-        this.writer = writer;
+        this.writer = writer || this.emit;
     }
 
     to(stream) {
@@ -23,7 +23,7 @@ class Stream {
 
     write(...values) {
         values.forEach(value => {
-            typeof this.writer === 'function' ? this.writer(value, this.inputCount++) : this.emit(value);
+            this.writer(value, this.inputCount++);
         });
     }
 
