@@ -15,11 +15,23 @@ myStream.write(11, 21, 31);
 
 ## Overview
 
+### chaining
+
+```js
+myStream
+    .write(10, 20, 30)
+    .each(print)
+    .map(double)
+    .filter(greaterThan30)
+    .write(-1, -2, -3)
+    .writePromise(requestAsyncNumber());
+```
+
 ### write (...values)
 
 `myStream.write(10, 20, 30);`
 
-### write array ([array of values])
+### write array (...[array of values])
 
 `myStream.write(...[10, 20, 30]);`
 
