@@ -11,9 +11,9 @@ describe('write', () => {
     });
 
     it('multiple arguments', () => {
-        s.write(10, 11, 12);
-        let s2 = s.each(spy1);
-        let s3 = s2.each(spy2);
+        let s2 = s.write(10, 11, 12);
+        let s3 = s.each(spy1);
+        let s4 = s3.each(spy2);
         expect(spy1).toHaveBeenCalledTimes(3);
         expect(spy1).toHaveBeenCalledWith(10, 0);
         expect(spy1).toHaveBeenCalledWith(11, 1);
@@ -23,14 +23,15 @@ describe('write', () => {
         expect(spy1).toHaveBeenCalledWith(11, 1);
         expect(spy1).toHaveBeenCalledWith(12, 2);
         expect(s.outValues).toEqual([10, 11, 12]);
-        expect(s2.outValues).toEqual([10, 11, 12]);
         expect(s3.outValues).toEqual([10, 11, 12]);
+        expect(s4.outValues).toEqual([10, 11, 12]);
+        expect(s2).toEqual(s);
     });
 
     it('single list argument', () => {
-        s.write(...[10, 11, 12]);
-        let s2 = s.each(spy1);
-        let s3 = s2.each(spy2);
+        let s2 = s.write(...[10, 11, 12]);
+        let s3 = s.each(spy1);
+        let s4 = s3.each(spy2);
         expect(spy1).toHaveBeenCalledTimes(3);
         expect(spy1).toHaveBeenCalledWith(10, 0);
         expect(spy1).toHaveBeenCalledWith(11, 1);
@@ -40,17 +41,19 @@ describe('write', () => {
         expect(spy1).toHaveBeenCalledWith(11, 1);
         expect(spy1).toHaveBeenCalledWith(12, 2);
         expect(s.outValues).toEqual([10, 11, 12]);
-        expect(s2.outValues).toEqual([10, 11, 12]);
         expect(s3.outValues).toEqual([10, 11, 12]);
+        expect(s4.outValues).toEqual([10, 11, 12]);
+        expect(s2).toEqual(s);
     });
 
     it('promise', done => {
         let resolved = Promise.resolve(10);
         let rejected = Promise.reject(15);
-        s.writePromise(resolved, rejected);
+        let s2 = s.writePromise(resolved, rejected);
         s.each(value => {
             expect(value).toEqual(10);
             done();
         });
+        expect(s2).toEqual(s);
     });
 });

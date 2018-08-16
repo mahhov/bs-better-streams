@@ -25,6 +25,7 @@ class Stream {
         values.forEach(value => {
             this.writer(value, this.inputCount++);
         });
+        return this;
     }
 
     writePromise(...promises) {
@@ -34,6 +35,7 @@ class Stream {
             }).catch(() => {
             });
         });
+        return this;
     }
 
     each(handler) {
