@@ -1,30 +1,34 @@
 class Stream {
-    constructor(writer) {
+    constructor(absorber) {
         this.outValues = [];
         this.inputCount = 0;
         this.next = [];
-        this.writer = writer || this.emit;
+        this.absorber = absorber || this.defaultAbsorber;
     }
 
     to(stream) {
         this.next.push(stream);
         this.outValues.forEach(value => {
-            stream.write(value);
+            stream.absorb(value);
         });
         return stream
     }
 
-    emit(outValue) {
-        this.next.forEach(nextStream => {
-            nextStream.write(outValue);
-        });
-        this.outValues.push(outValue);
+    defaultAbsorber(a) {
+        this.write(a);
     }
 
-    write(...values) {
+    absorb(...values) {
         values.forEach(value => {
-            this.writer(value, this.inputCount++);
+            this.absorber(value, this.inputCount++);
         });
+    }
+
+    write(...outValue) {
+        this.next.forEach(nextStream => {
+            nextStream.absorb(...outValue);
+        });
+        this.outValues.push(...outValue);
         return this;
     }
 
@@ -41,19 +45,19 @@ class Stream {
     each(handler) {
         return this.to(new Stream(function (value, index) {
             handler(value, index);
-            this.emit(value);
+            this.write(value);
         }));
     }
 
     map(handler) {
         return this.to(new Stream(function (value, index) {
-            this.emit(handler(value, index));
+            this.write(handler(value, index));
         }));
     }
 
     filter(handler) {
         return this.to(new Stream(function (value, index) {
-            handler(value, index) && this.emit(value)
+            handler(value, index) && this.write(value)
         }));
     }
 
@@ -67,25 +71,25 @@ class Stream {
 
     unique() {
         return this.to(new Stream(function (value) {
-            this.outValues.includes(value) || this.emit(value);
+            this.outValues.includes(value) || this.write(value);
         }));
     }
 
     uniqueOn(name) {
         return this.to(new Stream(function (value) {
-            this.outValues.some(outValue => outValue[name] === value[name]) || this.emit(value);
+            this.outValues.some(outValue => outValue[name] === value[name]) || this.write(value);
         }));
     }
 
     uniqueX(handler) {
         return this.to(new Stream(function (value) {
-            this.outValues.some(outValue => handler(outValue) === handler(value)) || this.emit(value);
+            this.outValues.some(outValue => handler(outValue) === handler(value)) || this.write(value);
         }));
     }
 
     pluck(name) {
         return this.to(new Stream(function (value) {
-            this.emit(value[name]);
+            this.write(value[name]);
         }));
     }
 
@@ -93,14 +97,14 @@ class Stream {
         return this.to(new Stream(function (value) {
             let wrapped = {};
             wrapped[name] = value;
-            this.emit(wrapped);
+            this.write(wrapped);
         }));
     }
 
     set(name, handler) {
         return this.to(new Stream(function (value, index) {
             value[name] = handler(value, index);
-            this.emit(value);
+            this.write(value);
         }));
     }
 
@@ -108,7 +112,7 @@ class Stream {
         return this.to(new Stream(function (value, index) {
             let count = handler(value, index);
             for (let i = 0; i < count; i++)
-                this.emit(value);
+                this.write(value); // todo write now supports multiple arguments
         }));
     }
 
@@ -119,7 +123,7 @@ class Stream {
     flatten() {
         return this.to(new Stream(function (value) {
             value.forEach(item => {
-                this.emit(item);
+                this.write(item);
             });
         }));
     }
@@ -130,7 +134,7 @@ class Stream {
                 let flattened = Object.assign({}, value);
                 delete flattened[name];
                 flattened[nameTo] = item;
-                this.emit(flattened);
+                this.write(flattened);
             });
         }));
     }
@@ -146,7 +150,7 @@ class Stream {
                 .each(right => {
                     let product = Object.assign({}, left);
                     product[name] = right;
-                    this.emit(product);
+                    this.write(product);
                 });
         }));
     }
@@ -156,7 +160,7 @@ class Stream {
             rightStream
                 .filter(right => leftIdHandler(left) === rightIdHandler(right))
                 .each(right => {
-                    this.emit(productHandler(left, right));
+                    this.write(productHandler(left, right));
                 });
         }));
     }
@@ -164,7 +168,7 @@ class Stream {
     wait() {
         return this.to(new Stream(function (value) {
             value.then(resolve => {
-                this.emit(resolve);
+                this.write(resolve);
             }).catch(() => {
             });
         }));
@@ -175,7 +179,7 @@ class Stream {
             value[name].then(resolve => {
                 let waited = Object.assign({}, value);
                 waited[name] = resolve;
-                this.emit(waited);
+                this.write(waited);
             }).catch(() => {
             });
         }));
@@ -192,7 +196,7 @@ class Stream {
             do {
                 let value = queue.shift();
                 let resolve = await value;
-                this.emit(resolve);
+                this.write(resolve);
             } while (queue.length);
             idle = true;
         }));
@@ -203,7 +207,7 @@ class Stream {
         let els = new Stream();
 
         this.to(new Stream((value, index) => {
-            handler(value, index) ? then.emit(value) : els.emit(value);
+            handler(value, index) ? then.write(value) : els.write(value);
         }));
 
         return {then, else: els};
@@ -215,7 +219,7 @@ class Stream {
         this.to(new Stream((value, index) => {
             let group = handler(value, index);
             groups[group] = groups[group] || new Stream();
-            groups[group].emit(value);
+            groups[group].write(value);
         }));
 
         return groups;
@@ -249,7 +253,7 @@ class Stream {
         let buffer = [];
         return this.to(new Stream(function (value) {
             if (buffer.push(value) >= count) {
-                this.emit(buffer);
+                this.write(buffer);
                 buffer = [];
             }
         }));
@@ -258,9 +262,9 @@ class Stream {
     generate(handler) {
         return this.to(new Stream(function (value, index) {
             let values = handler(value, index);
-            this.emit(value);
+            this.write(value);
             values.forEach(value => {
-                this.emit(value);
+                this.write(value);
             });
         }));
     }
@@ -269,7 +273,7 @@ class Stream {
         return this.to(new Stream(function (value, index) {
             let values = handler(value, index);
             values.forEach(value => {
-                this.emit(value);
+                this.write(value);
             });
         }));
     }
@@ -281,7 +285,7 @@ class Stream {
         let stream = this.to(new Stream(function (value) {
             if (count > 0 || unthrottled) {
                 count--;
-                this.emit(value);
+                this.write(value);
             } else
                 queue.push(value);
         }));
@@ -290,7 +294,7 @@ class Stream {
             count += n;
             while (count > 0 && queue.length) {
                 count--;
-                stream.emit(queue.shift());
+                stream.write(queue.shift());
             }
         };
 
@@ -301,7 +305,7 @@ class Stream {
         let unthrottle = () => {
             unthrottled = true;
             queue.forEach(value => {
-                stream.emit(value)
+                stream.write(value)
             });
             queue = [];
         };

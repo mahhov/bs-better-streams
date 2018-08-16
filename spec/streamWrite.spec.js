@@ -47,13 +47,24 @@ describe('write', () => {
     });
 
     it('promise', done => {
-        let resolved = Promise.resolve(10);
         let rejected = Promise.reject(15);
-        let s2 = s.writePromise(resolved, rejected);
+        let resolved = Promise.resolve(10);
+        let s2 = s.writePromise(rejected, resolved);
         s.each(value => {
             expect(value).toEqual(10);
             done();
         });
         expect(s2).toEqual(s);
+    });
+
+    it('write intermediate stream', () => {
+        let s2 = s.map(a => a + 1);
+        let s3 = s2.map(a => a * 2);
+        s.write(10);
+        s2.write(100);
+        s3.write(1000);
+        expect(s.outValues).toEqual([10]);
+        expect(s2.outValues).toEqual([11, 100]);
+        expect(s3.outValues).toEqual([22, 200, 1000]);
     });
 });

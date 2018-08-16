@@ -51,7 +51,7 @@ describe('async', () => {
         promiseWrap3.resolve(3);
         promiseWrap2.resolve(2);
         promiseWrap1.resolve(1);
-        Promise.all([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise, s2.writer()]).then(() => {
+        Promise.all([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise, s2.absorber()]).then(() => {
             expect(s.outValues).toEqual([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise]);
             expect(s2.outValues).toEqual([undefined, 1, 2, 3]);
             done();

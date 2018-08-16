@@ -21,7 +21,7 @@ let myStream = new Stream();
 
 // syntax 1
 
-myStream.write(110, 10, 30, 130, 50, 150);
+myStream.absorb(110, 10, 30, 130, 50, 150);
 let ifStreams = myStream.if(value => value > 100);
 
 let outThen = ifStreams.then.map(value => value * 2);
@@ -33,7 +33,7 @@ console.log(out.outValues);
 
 // syntax 2
 
-myStream.write(110, 10, 30, 130, 50, 150);
+myStream.absorb(110, 10, 30, 130, 50, 150);
 
 let out = myStream
     .if(value => value > 100)
