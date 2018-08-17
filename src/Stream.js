@@ -132,7 +132,7 @@ class Stream {
         return this.to(new Stream(function (value, index) {
             let count = handler(value, index);
             for (let i = 0; i < count; i++)
-                this.write(value); // todo write now supports multiple arguments
+                this.write(value);
         }));
     }
 
@@ -142,9 +142,7 @@ class Stream {
 
     flatten() {
         return this.to(new Stream(function (value) {
-            value.forEach(item => {
-                this.write(item);
-            });
+            this.write(...value);
         }));
     }
 
@@ -292,9 +290,7 @@ class Stream {
     flatMap(handler) {
         return this.to(new Stream(function (value, index) {
             let values = handler(value, index);
-            values.forEach(value => {
-                this.write(value);
-            });
+            this.write(...values);
         }));
     }
 
@@ -313,7 +309,7 @@ class Stream {
         let next = (n = 1) => {
             count += n;
             while (count > 0 && queue.length) {
-                count--;
+                count--; // todo can we slice queue at count index and then write the first section, retain the 2nd section
                 stream.write(queue.shift());
             }
         };
@@ -324,9 +320,7 @@ class Stream {
 
         let unthrottle = () => {
             unthrottled = true;
-            queue.forEach(value => {
-                stream.write(value)
-            });
+            stream.write(...queue);
             queue = [];
         };
 
