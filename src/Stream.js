@@ -308,10 +308,9 @@ class Stream {
 
         let next = (n = 1) => {
             count += n;
-            while (count > 0 && queue.length) {
-                count--; // todo can we slice queue at count index and then write the first section, retain the 2nd section
-                stream.write(queue.shift());
-            }
+            let removeCount = Math.min(count, queue.length);
+            count -= removeCount;
+            stream.write(...queue.splice(0, removeCount));
         };
 
         let nextOne = () => {
