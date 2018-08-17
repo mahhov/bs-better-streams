@@ -172,14 +172,56 @@ describe('core', () => {
         expect(s2.outValues).toEqual([{key: 'value1'}, {key: 'value2'}, {key: 'value3'}, {key: 'value4'}]);
     });
 
+    it('pick', () => {
+        let s2 = s.pick('key1', 'key2');
+        s.write({key1: 'value11', key2: 'value21', key3: 'value31', key4: 'value41'});
+        s.write({key1: 'value12', key2: 'value22', key3: 'value32', key4: 'value42'});
+        s.write({key1: 'value13', key2: 'value23', key3: 'value33', key4: 'value43'});
+        s.write({key1: 'value14', key2: 'value24', key3: 'value34', key4: 'value44'});
+        expect(s.outValues).toEqual([
+            {key1: 'value11', key2: 'value21', key3: 'value31', key4: 'value41'},
+            {key1: 'value12', key2: 'value22', key3: 'value32', key4: 'value42'},
+            {key1: 'value13', key2: 'value23', key3: 'value33', key4: 'value43'},
+            {key1: 'value14', key2: 'value24', key3: 'value34', key4: 'value44'}]);
+        expect(s2.outValues).toEqual([
+            {key1: 'value11', key2: 'value21'},
+            {key1: 'value12', key2: 'value22'},
+            {key1: 'value13', key2: 'value23'},
+            {key1: 'value14', key2: 'value24'}]);
+    });
+
+    it('omit', () => {
+        let s2 = s.omit('key3', 'key4');
+        s.write({key1: 'value11', key2: 'value21', key3: 'value31', key4: 'value41'});
+        s.write({key1: 'value12', key2: 'value22', key3: 'value32', key4: 'value42'});
+        s.write({key1: 'value13', key2: 'value23', key3: 'value33', key4: 'value43'});
+        s.write({key1: 'value14', key2: 'value24', key3: 'value34', key4: 'value44'});
+        expect(s.outValues).toEqual([
+            {key1: 'value11', key2: 'value21', key3: 'value31', key4: 'value41'},
+            {key1: 'value12', key2: 'value22', key3: 'value32', key4: 'value42'},
+            {key1: 'value13', key2: 'value23', key3: 'value33', key4: 'value43'},
+            {key1: 'value14', key2: 'value24', key3: 'value34', key4: 'value44'}]);
+        expect(s2.outValues).toEqual([
+            {key1: 'value11', key2: 'value21'},
+            {key1: 'value12', key2: 'value22'},
+            {key1: 'value13', key2: 'value23'},
+            {key1: 'value14', key2: 'value24'}]);
+    });
+
     it('set', () => {
         let s2 = s.set('sum', (value, index) => value.number + index);
         s.write({number: 10});
         s.write({number: 20});
         s.write({number: 30});
         s.write({number: 40});
-        expect(s.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {number: 40, sum: 43}]);
-        expect(s2.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {number: 40, sum: 43}]);
+        expect(s.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {
+            number: 40,
+            sum: 43
+        }]);
+        expect(s2.outValues).toEqual([{number: 10, sum: 10}, {number: 20, sum: 21}, {number: 30, sum: 32}, {
+            number: 40,
+            sum: 43
+        }]);
     });
 
     it('flatten', () => {

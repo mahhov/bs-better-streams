@@ -101,6 +101,26 @@ class Stream {
         }));
     }
 
+    pick(...names) {
+        return this.to(new Stream(function (value) {
+            let picked = {};
+            names.forEach(name => {
+                picked[name] = value[name];
+            });
+            this.write(picked);
+        }));
+    }
+
+    omit(...names) {
+        return this.to(new Stream(function (value) {
+            let omitted = Object.assign({}, value);
+            names.forEach(name => {
+                delete omitted[name];
+            });
+            this.write(omitted);
+        }));
+    }
+
     set(name, handler) {
         return this.to(new Stream(function (value, index) {
             value[name] = handler(value, index);

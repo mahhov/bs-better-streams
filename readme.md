@@ -131,6 +131,32 @@ myStream.write('value');
 // outStream.outValues equals [{key: 'value'}]
 ```
 
+### pick (...keyNames)
+
+```js
+let outStream = myStream.pick('name', 'age');
+myStream.write({
+    name: 'myName',
+    age: 'myAge',
+    gender: 'myGender',
+    weight: 'myWeight'
+});
+// outStream.outValues equals [{name: 'myName', age: 'myAge'}]
+```
+
+### omit (...keyNames)
+
+```js
+let outStream = myStream.omit('gender', 'weight');
+myStream.write({
+    name: 'myName',
+    age: 'myAge',
+    gender: 'myGender',
+    weight: 'myWeight'
+});
+// outStream.outValues equals [{name: 'myName', age: 'myAge'}]
+```
+
 ### set (keyName, handler)
 
 ```js
