@@ -27,6 +27,18 @@ myStream
     .writePromise(requestAsyncNumber());
 ```
 
+### accumulation
+
+you can use streams before and after you have began writing to them
+
+```js
+let myStream = stream();
+myStream.write(11, 21, 31);
+myStream.each(console.log);
+myStream.write(12, 22, 32);
+// will print 11, 21, 31, 12, 22, 32
+```
+
 ### write (...values)
 
 `myStream.write(10, 20, 30);`
@@ -465,14 +477,3 @@ Calling `throttled.unthrottle()` will allow all current and future values to pas
 ### outValues
 
 `myStream.outValues`
-
-### accumulation
-
-you can use streams before and after you have began writing to them
-
-```js
-let myStream = stream();
-myStream.write(11, 21, 31);
-myStream.each(console.log);
-myStream.write(12, 22, 32);
-```
