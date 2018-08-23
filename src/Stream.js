@@ -204,19 +204,22 @@ class Stream {
     }
 
     waitOrdered() {
-        let queue = [];
-        let idle = true;
         return this.to(new Stream(async function (value) {
-            queue.push(value);
-            if (!idle)
-                return;
+            try {
+                this.write(await value);
+            } catch (e) {
+            }
+        }));
+    }
 
-            do {
-                let value = queue.shift();
-                let resolve = await value;
-                this.write(resolve);
-            } while (queue.length);
-            idle = true;
+    waitOnOrdered(name) {
+        return this.to(new Stream(async function (value) {
+            let waited = Object.assign({}, value);
+            try {
+                waited[name] = await value[name];
+                this.write(waited);
+            } catch (e) {
+            }
         }));
     }
 

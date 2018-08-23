@@ -304,19 +304,6 @@ let outStream = myStream.waitOn('key2');
 // outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
 ```
 
-### waitOrdered ()
-
-```js
-let resolve1, resolve2;
-let promise1 = new Promise(resolve => resolve1 = resolve);
-let promise2 = new Promise(resolve => resolve2 = resolve);
-myStream.write(promise1, promise2);
-let outStream = myStream.waitOrdered();
-resolve2('promise 2 resolved first');
-resolve1('promise 1 resolved last');
-// outStream.outValues equals ['promise 1 resolved last', 'promise 2 resolved first']
-```
-
 #### Why is waitOn useful?
 
 imagine we have a set of users
@@ -352,6 +339,32 @@ but with `waitOn`, we can simply do the following
 users
     .set('shape', ({userId}) => getUserShape(userId))
     .waitOn('shape');
+```
+
+### waitOrdered ()
+
+```js
+let resolve1, resolve2;
+let promise1 = new Promise(resolve => resolve1 = resolve);
+let promise2 = new Promise(resolve => resolve2 = resolve);
+myStream.write(promise1, promise2);
+let outStream = myStream.waitOrdered();
+resolve2('promise 2 resolved first');
+resolve1('promise 1 resolved last');
+// outStream.outValues equals ['promise 1 resolved last', 'promise 2 resolved first']
+```
+
+### waitOnOrdered (key)
+
+```js
+let resolve1, resolve2;
+let promise1 = new Promise(resolve => resolve1 = resolve);
+let promise2 = new Promise(resolve => resolve2 = resolve);
+myStream.write({key: promise1}, {key: promise2});
+let outStream = myStream.waitOnOrdered('key');
+resolve2('promise 2 resolved first');
+resolve1('promise 1 resolved last');
+// outStream.outValues equals [{key: 'promise 1 resolved last', key: 'promise 2 resolved first'}]
 ```
 
 ### if (predicateHandler)

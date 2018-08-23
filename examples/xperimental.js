@@ -2,13 +2,14 @@ const Stream = require('../src/Stream');
 
 let myStream = new Stream();
 
-let outStream = myStream.omit('gender', 'weight');
-myStream.write({
-    name: 'myName',
-    age: 'myAge',
-    gender: 'myGender',
-    weight: 'myWeight'
-});
-// outStream.outValues equals [{name: 'myName', age: 'myAge'}]
+let resolve1, resolve2;
+let promise1 = new Promise(resolve => resolve1 = resolve);
+let promise2 = new Promise(resolve => resolve2 = resolve);
+myStream.write({key: promise1}, {key: promise2});
+let outStream = myStream.waitOnOrdered('key');
+resolve2('promise 2 resolved first');
+resolve1('promise 1 resolved last');
 
-console.log(outStream.outValues);
+setTimeout(() => {
+    console.log(outStream.outValues);
+});
