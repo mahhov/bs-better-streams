@@ -84,6 +84,14 @@ myStream.write('first', 'second', 'third', 'fourth', 'fifth');
 // outStream.outValues equals [first, third, fourth]
 ```
 
+### filterMap (predicateHandler, truePredicateHandler, falsePredicateHandler)
+
+```js
+let outStream = myStream.filterMap(value => value > 100, a => a + 100, a => -a);
+myStream.write(200, 0, 1, 201, 2, 202);
+// outStream.outValues equals [300, -0, -1, 301, -2, 302]
+```
+
 ### unique ()
 
 ```js

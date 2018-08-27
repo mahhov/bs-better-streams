@@ -69,6 +69,12 @@ class Stream {
         return this.filter((value, index) => indexes.includes(index));
     }
 
+    filterMap(handler, trueHandler, falseHandler) {
+        return this.to(new Stream(function (value, index) {
+            this.write((handler(value, index) ? trueHandler : falseHandler)(value, index));
+        }));
+    }
+
     unique() {
         return this.to(new Stream(function (value) {
             this.outValues.includes(value) || this.write(value);
