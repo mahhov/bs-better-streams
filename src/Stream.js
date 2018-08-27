@@ -240,6 +240,22 @@ class Stream {
         return {then, else: els};
     }
 
+    split(handler, trueHandler, falseHandler) {
+        let then = new Stream();
+        let els = new Stream();
+
+        let thenOut = trueHandler(then);
+        let elsOut = falseHandler(els);
+
+        let join = thenOut.join(elsOut);
+
+        this.to(new Stream((value, index) => {
+            handler(value, index) ? then.write(value) : els.write(value);
+        }));
+
+        return join;
+    }
+
     group(handler) {
         let groups = {};
 

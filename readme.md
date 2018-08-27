@@ -389,6 +389,23 @@ console.log('numbers under 100:');
 ifStreams.else.each(value => console.log(value));
 ```
 
+### split (predicateHandler, truePredicateHandler, falsePredicateHandler)
+
+```
+myStream.write({species: 'kitten', name: 'tickleMe'});
+myStream.write({species: 'kitten', name: 'pokeMe'});
+myStream.write({species: 'puppy', name: 'hugMe'});
+myStream.split(
+	animal => animal.species === 'kitten',
+	kittenStream => kittenStream
+		.set('sound', () => 'meow')
+		.set('image', ({name}) => getRandomLolzCatImage(name)),
+	puppyStream => puppyStream
+		.set('sound', () => 'wuff')
+		.set('edible', () => true)
+		.each(dipInChocolate));
+```
+
 ### group (handler)
 
 ```js

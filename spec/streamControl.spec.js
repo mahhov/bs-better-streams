@@ -150,6 +150,15 @@ describe('control', () => {
         expect(ifStreams.else.outValues).toEqual([16, 17, 15]);
     });
 
+    it('split', () => {
+        let s2 = s.split(value => value > 100,
+            stream => stream.map(a => a + 100),
+            stream => stream.map(a => -a));
+        s.write(200, 0, 1, 201, 2, 202);
+        expect(s.outValues).toEqual([200, 0, 1, 201, 2, 202]);
+        expect(s2.outValues).toEqual([300, -0, -1, 301, -2, 302]);
+    });
+
     it('group', () => {
         let s2 = s.group(value => value % 3);
         let s3 = s.group(value => value % 2 + 'x');
