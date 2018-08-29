@@ -93,6 +93,13 @@ describe('core', () => {
         expect(s2.outValues).toEqual([300, -1, -3, 304, -6, 307]);
     });
 
+    it('filterMap optional falseHandler', () => {
+        let s2 = s.filterMap(value => value > 100, (a, i) => a + 100 + i);
+        s.write(200, 0, 1, 201, 2, 202);
+        expect(s.outValues).toEqual([200, 0, 1, 201, 2, 202]);
+        expect(s2.outValues).toEqual([300, 0, 1, 304, 2, 307]);
+    });
+
     it('unique', () => {
         let s2 = s.unique();
         s.write(1, 2, 3, 4, 2, 4, 3, 4, 5, 3, 1, 5, 6, 6);

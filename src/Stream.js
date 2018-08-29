@@ -244,7 +244,7 @@ class Stream {
         return {then, else: els};
     }
 
-    split(handler, trueHandler, falseHandler) {
+    split(handler, trueHandler, falseHandler = a => a) {
         let then = new Stream();
         let els = new Stream();
 
