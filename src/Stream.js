@@ -191,7 +191,7 @@ class Stream {
 
     wait() {
         return this.to(new Stream(function (value) {
-            value.then(resolve => {
+            Promise.resolve(value).then(resolve => {
                 this.write(resolve);
             }).catch(() => {
             });
@@ -200,7 +200,7 @@ class Stream {
 
     waitOn(name) {
         return this.to(new Stream(function (value) {
-            value[name].then(resolve => {
+            Promise.resolve(value[name]).then(resolve => {
                 let waited = Object.assign({}, value);
                 waited[name] = resolve;
                 this.write(waited);
@@ -213,7 +213,7 @@ class Stream {
         let prevWrapPromise = Promise.resolve();
         return this.to(new Stream(function (value) {
             prevWrapPromise = prevWrapPromise.then(() =>
-                value.then(resolve => {
+                Promise.resolve(value).then(resolve => {
                     this.write(resolve);
                 }).catch(() => {
                 }))
@@ -224,7 +224,7 @@ class Stream {
         let prevWrapPromise = Promise.resolve();
         return this.to(new Stream(function (value) {
             prevWrapPromise = prevWrapPromise.then(() =>
-                value[name].then(resolve => {
+                Promise.resolve(value[name]).then(resolve => {
                     let waited = Object.assign({}, value);
                     waited[name] = resolve;
                     this.write(waited);

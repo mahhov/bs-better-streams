@@ -18,11 +18,12 @@ describe('async', () => {
         let promise4 = Promise.reject(4);
         s.write(promise1);
         s.write(promise2);
+        s.write(2.5);
         s.write(promise3);
         s.write(promise4);
         Promise.all([promise1, promise2, promise3]).then(() => {
-            expect(s.outValues).toEqual([promise1, promise2, promise3, promise4]);
-            expect(s2.outValues).toEqual([1, 2, 3]);
+            expect(s.outValues).toEqual([promise1, promise2, 2.5, promise3, promise4]);
+            expect(s2.outValues).toEqual([1, 2, 2.5, 3]);
             done();
         });
     });
@@ -35,11 +36,12 @@ describe('async', () => {
         let promise4 = Promise.reject(4);
         s.write({key: promise1});
         s.write({key: promise2});
+        s.write({key: 2.5});
         s.write({key: promise3});
         s.write({key: promise4});
         Promise.all([promise1, promise2, promise3]).then(() => {
-            expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: promise3}, {key: promise4}]);
-            expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}]);
+            expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: 2.5}, {key: promise3}, {key: promise4}]);
+            expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 2.5}, {key: 3}]);
             done();
         });
     });
@@ -58,6 +60,7 @@ describe('async', () => {
         s.write(promise2);
         s.write(promise3);
         s.write(promise4);
+        s.write(4.5);
         s.write(promise5);
         s.write(promise6);
         s.write(promise7);
@@ -71,8 +74,8 @@ describe('async', () => {
         promise5.sresolve(5);
         promise6.sresolve(6);
         await promise6 && await sleep();
-        expect(s.outValues).toEqual([promise1, promise2, promise3, promise4, promise5, promise6, promise7, promise8]);
-        expect(s2.outValues).toEqual([1, 2, 3, 5, 6, 7, 8]);
+        expect(s.outValues).toEqual([promise1, promise2, promise3, promise4, 4.5, promise5, promise6, promise7, promise8]);
+        expect(s2.outValues).toEqual([1, 2, 3, 4.5, 5, 6, 7, 8]);
         done();
     });
 
@@ -90,6 +93,7 @@ describe('async', () => {
         s.write({key: promise2});
         s.write({key: promise3});
         s.write({key: promise4});
+        s.write({key: 4.5});
         s.write({key: promise5});
         s.write({key: promise6});
         s.write({key: promise7});
@@ -103,8 +107,8 @@ describe('async', () => {
         promise5.sresolve(5);
         promise6.sresolve(6);
         await promise6 && await sleep();
-        expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: promise3}, {key: promise4}, {key: promise5}, {key: promise6}, {key: promise7}, {key: promise8}]);
-        expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
+        expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: promise3}, {key: promise4}, {key: 4.5}, {key: promise5}, {key: promise6}, {key: promise7}, {key: promise8}]);
+        expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: 4.5}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
         done();
     });
 
