@@ -8,8 +8,13 @@ let promise2 = new Promise(resolve => resolve2 = resolve);
 myStream.write({key: promise1}, {key: promise2});
 let outStream = myStream.waitOnOrdered('key');
 resolve2('promise 2 resolved first');
-resolve1('promise 1 resolved last');
+
+setTimeout(() => {
+    resolve1('promise 1 resolved last');
+}, 5);
+
 
 setTimeout(() => {
     console.log(outStream.outValues);
-});
+}, 10);
+

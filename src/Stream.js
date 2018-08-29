@@ -69,7 +69,7 @@ class Stream {
         return this.filter((value, index) => indexes.includes(index));
     }
 
-    filterMap(handler, trueHandler, falseHandler) {
+    filterMap(handler, trueHandler, falseHandler = a => a) {
         return this.to(new Stream(function (value, index) {
             this.write((handler(value, index) ? trueHandler : falseHandler)(value, index));
         }));
@@ -210,22 +210,26 @@ class Stream {
     }
 
     waitOrdered() {
-        return this.to(new Stream(async function (value) {
-            try {
-                this.write(await value);
-            } catch (e) {
-            }
+        let prevWrapPromise = Promise.resolve();
+        return this.to(new Stream(function (value) {
+            prevWrapPromise = prevWrapPromise.then(() =>
+                value.then(resolve => {
+                    this.write(resolve);
+                }).catch(() => {
+                }))
         }));
     }
 
     waitOnOrdered(name) {
-        return this.to(new Stream(async function (value) {
-            let waited = Object.assign({}, value);
-            try {
-                waited[name] = await value[name];
-                this.write(waited);
-            } catch (e) {
-            }
+        let prevWrapPromise = Promise.resolve();
+        return this.to(new Stream(function (value) {
+            prevWrapPromise = prevWrapPromise.then(() =>
+                value[name].then(resolve => {
+                    let waited = Object.assign({}, value);
+                    waited[name] = resolve;
+                    this.write(waited);
+                }).catch(() => {
+                }))
         }));
     }
 
@@ -367,3 +371,5 @@ module.exports = Stream;
 // while/until loops
 // syntax for if / group by / throttled
 // product & filterCount & filterIndex to be more efficient
+// nest (opposite of flattenOn) (sibling of wrap)
+// wait [on] [ordered] to accept non promises

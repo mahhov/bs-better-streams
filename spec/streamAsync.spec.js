@@ -44,46 +44,68 @@ describe('async', () => {
         });
     });
 
-    it('waitOrdered', done => {
+    it('waitOrdered', async (done) => {
         let s2 = s.waitOrdered();
-        let promiseWrap1 = createPromise();
-        let promiseWrap2 = createPromise();
-        let promiseWrap3 = createPromise();
-        let promiseWrap4 = createPromise();
-        s.write(promiseWrap1.promise);
-        s.write(promiseWrap2.promise);
-        s.write(promiseWrap3.promise);
-        s.write(promiseWrap4.promise);
-        promiseWrap3.resolve(3);
-        promiseWrap2.resolve(2);
-        promiseWrap1.resolve(1);
-        promiseWrap4.reject(4);
-        Promise.all([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise, s2.absorber(Promise.reject())]).then(() => {
-            expect(s.outValues).toEqual([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise, promiseWrap4.promise]);
-            expect(s2.outValues).toEqual([1, 2, 3]);
-            done();
-        });
+        let promise1 = createPromise();
+        let promise2 = createPromise();
+        let promise3 = createPromise();
+        let promise4 = createPromise();
+        let promise5 = createPromise();
+        let promise6 = createPromise();
+        let promise7 = createPromise();
+        let promise8 = createPromise();
+        s.write(promise1);
+        s.write(promise2);
+        s.write(promise3);
+        s.write(promise4);
+        s.write(promise5);
+        s.write(promise6);
+        s.write(promise7);
+        s.write(promise8);
+        promise7.sresolve(7);
+        promise8.sresolve(8);
+        promise3.sresolve(3);
+        promise4.sreject(4);
+        promise2.sresolve(2);
+        promise1.sresolve(1);
+        promise5.sresolve(5);
+        promise6.sresolve(6);
+        await promise6 && await sleep();
+        expect(s.outValues).toEqual([promise1, promise2, promise3, promise4, promise5, promise6, promise7, promise8]);
+        expect(s2.outValues).toEqual([1, 2, 3, 5, 6, 7, 8]);
+        done();
     });
 
-    it('waitOnOrdered', done => {
+    it('waitOnOrdered', async (done) => {
         let s2 = s.waitOnOrdered('key');
-        let promiseWrap1 = createPromise();
-        let promiseWrap2 = createPromise();
-        let promiseWrap3 = createPromise();
-        let promiseWrap4 = createPromise();
-        s.write({key: promiseWrap1.promise});
-        s.write({key: promiseWrap2.promise});
-        s.write({key: promiseWrap3.promise});
-        s.write({key: promiseWrap4.promise});
-        promiseWrap3.resolve(3);
-        promiseWrap2.resolve(2);
-        promiseWrap1.resolve(1);
-        promiseWrap4.reject(4);
-        Promise.all([promiseWrap1.promise, promiseWrap2.promise, promiseWrap3.promise, s2.absorber({key: Promise.reject()})]).then(() => {
-            expect(s.outValues).toEqual([{key: promiseWrap1.promise}, {key: promiseWrap2.promise}, {key: promiseWrap3.promise}, {key: promiseWrap4.promise}]);
-            expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}]);
-            done();
-        });
+        let promise1 = createPromise();
+        let promise2 = createPromise();
+        let promise3 = createPromise();
+        let promise4 = createPromise();
+        let promise5 = createPromise();
+        let promise6 = createPromise();
+        let promise7 = createPromise();
+        let promise8 = createPromise();
+        s.write({key: promise1});
+        s.write({key: promise2});
+        s.write({key: promise3});
+        s.write({key: promise4});
+        s.write({key: promise5});
+        s.write({key: promise6});
+        s.write({key: promise7});
+        s.write({key: promise8});
+        promise7.sresolve(7);
+        promise8.sresolve(8);
+        promise3.sresolve(3);
+        promise4.sreject(4);
+        promise2.sresolve(2);
+        promise1.sresolve(1);
+        promise5.sresolve(5);
+        promise6.sresolve(6);
+        await promise6 && await sleep();
+        expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: promise3}, {key: promise4}, {key: promise5}, {key: promise6}, {key: promise7}, {key: promise8}]);
+        expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
+        done();
     });
 
     let createPromise = () => {
@@ -92,6 +114,13 @@ describe('async', () => {
             resolve = resolv;
             reject = rejec;
         });
-        return {promise, resolve, reject};
+        promise.catch(a => a);
+        promise.resolve = resolve;
+        promise.reject = reject;
+        promise.sreject = value => sleep().then(() => reject(value));
+        promise.sresolve = value => sleep().then(() => resolve(value));
+        return promise;
     };
+
+    let sleep = (milli = 0) => new Promise(resolve => setTimeout(resolve, milli));
 });
