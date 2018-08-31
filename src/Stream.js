@@ -88,6 +88,24 @@ class Stream {
         }));
     }
 
+    switchMap(switchHandler, ...caseHandlers) {
+        let pairedHandlers = [];
+        while (caseHandlers.length >= 2)
+            pairedHandlers.push(caseHandlers.splice(0, 2));
+        let [defaultHandler] = caseHandlers;
+
+        return this.to(new Stream(function (value, index) {
+            let switchValue = switchHandler(value);
+            let handlers = pairedHandlers.find(([caseValue]) => switchValue === caseValue);
+            if (handlers)
+                this.write(handlers[1](value, index));
+            else if (defaultHandler)
+                this.write(defaultHandler(value, index));
+            else
+                this.write(value);
+        }));
+    }
+
     unique() {
         return this.to(new Stream(function (value) {
             this.outValues.includes(value) || this.write(value);

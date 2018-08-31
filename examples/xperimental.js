@@ -2,11 +2,18 @@ const Stream = require('../src/Stream');
 
 let myStream = new Stream();
 
-let outStream = myStream.branchMap(
-    a => a[0] === 'a', a => 'Apple ' + a,
-    a => a[0] === 'b', a => 'Banana ' + a,
-    a => 'Other ' + a);
-myStream.write('at', 'bat', 'action', 'cat', 'aaa');
-console.log(outStream.outValues);
+let outStream = myStream.switchMap(a => a.type,
+    'animal', a => `i have a pet ${a.value}`,
+    'number', a => `u have ${a.value} pencils`,
+    'color', a => `his favorite color is ${a.value}`);
 
-['Apple at', 'Banana bat', 'Apple action', 'Other cat', 'Apple aaa']
+myStream.write(
+    {type: 'animal', value: 'elephant'},
+    {type: 'animal', value: 'flamingo'},
+    {type: 'number', value: 51},
+    {type: 'number', value: 1235},
+    {type: 'color', value: 'blue'},
+    {type: 'color', value: 'pink'},
+    {type: 'star', value: 'sun'});
+
+console.log(outStream.outValues);

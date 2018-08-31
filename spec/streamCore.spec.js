@@ -119,6 +119,59 @@ describe('core', () => {
         expect(s2.outValues).toEqual(['Apple at', 'Banana bat', 'Apple action', 'Other cat', 'Apple aaa']);
     });
 
+    it('switchMap optional', () => {
+        let s2 = s.switchMap(
+            a => a.type,
+            'animal', a => `i have a pet ${a.value}`,
+            'number', a => `u have ${a.value} pencils`,
+            'color', a => `his favorite color is ${a.value}`);
+        s.write(
+            {type: 'animal', value: 'elephant'},
+            {type: 'animal', value: 'flamingo'},
+            {type: 'number', value: 51},
+            {type: 'number', value: 1235},
+            {type: 'color', value: 'blue'},
+            {type: 'color', value: 'pink'},
+            {type: 'star', value: 'sun'});
+        expect(s.outValues).toEqual([
+            {type: 'animal', value: 'elephant'},
+            {type: 'animal', value: 'flamingo'},
+            {type: 'number', value: 51},
+            {type: 'number', value: 1235},
+            {type: 'color', value: 'blue'},
+            {type: 'color', value: 'pink'},
+            {type: 'star', value: 'sun'}]);
+        expect(s2.outValues).toEqual(['i have a pet elephant', 'i have a pet flamingo', 'u have 51 pencils', 'u have 1235 pencils', 'his favorite color is blue', 'his favorite color is pink', {type: 'star', value: 'sun'}]
+        );
+    });
+
+    it('switchMap optional defaultHandler', () => {
+        let s2 = s.switchMap(
+            a => a.type,
+            'animal', a => `i have a pet ${a.value}`,
+            'number', a => `u have ${a.value} pencils`,
+            'color', a => `his favorite color is ${a.value}`,
+            a => `other: ${a.value}`);
+        s.write(
+            {type: 'animal', value: 'elephant'},
+            {type: 'animal', value: 'flamingo'},
+            {type: 'number', value: 51},
+            {type: 'number', value: 1235},
+            {type: 'color', value: 'blue'},
+            {type: 'color', value: 'pink'},
+            {type: 'star', value: 'sun'});
+        expect(s.outValues).toEqual([
+            {type: 'animal', value: 'elephant'},
+            {type: 'animal', value: 'flamingo'},
+            {type: 'number', value: 51},
+            {type: 'number', value: 1235},
+            {type: 'color', value: 'blue'},
+            {type: 'color', value: 'pink'},
+            {type: 'star', value: 'sun'}]);
+        expect(s2.outValues).toEqual(['i have a pet elephant', 'i have a pet flamingo', 'u have 51 pencils', 'u have 1235 pencils', 'his favorite color is blue', 'his favorite color is pink', 'other: sun']
+        );
+    });
+
     it('unique', () => {
         let s2 = s.unique();
         s.write(1, 2, 3, 4, 2, 4, 3, 4, 5, 3, 1, 5, 6, 6);
