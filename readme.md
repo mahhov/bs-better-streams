@@ -479,6 +479,20 @@ let outStream = myStream.batch(4);
 // outStream.outValues equals [[0, 10, 20, 30], [40, 50, 60, 70]]
 ```
 
+### batchFlat (integerBatchSize)
+
+```js
+let outStream = myStream.batchFlat(4);
+myStream.write(0, 10, 20);
+// outStream.outValues equals []
+myStream.write(30, 40, 50);
+// outStream.outValues equals [0, 10, 20, 30]
+myStream.write(60, 70, 80);
+// outStream.outValues equals [0, 10, 20, 30, 40, 50, 60, 70]
+myStream.write(90, 100);
+// outStream.outValues equals [0, 10, 20, 30, 40, 50, 60, 70]
+```
+
 ### generate (handler)
 
 ```js

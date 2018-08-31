@@ -223,6 +223,34 @@ describe('control', () => {
         expect(s2.outValues).toEqual([[0, 1, 2], [3, 4, 5]]);
     });
 
+    it('batchFlat', () => {
+        let s2 = s.batchFlat(3);
+        s.write(0);
+        expect(s.outValues).toEqual([0]);
+        expect(s2.outValues).toEqual([]);
+        s.write(1);
+        expect(s.outValues).toEqual([0, 1]);
+        expect(s2.outValues).toEqual([]);
+        s.write(2);
+        expect(s.outValues).toEqual([0, 1, 2]);
+        expect(s2.outValues).toEqual([[0, 1, 2]]);
+        s.write(3);
+        expect(s.outValues).toEqual([0, 1, 2, 3]);
+        expect(s2.outValues).toEqual([[0, 1, 2]]);
+        s.write(4);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4]);
+        expect(s2.outValues).toEqual([[0, 1, 2]]);
+        s.write(5);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5]);
+        expect(s2.outValues).toEqual([[0, 1, 2], [3, 4, 5]]);
+        s.write(6);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6]);
+        expect(s2.outValues).toEqual([[0, 1, 2], [3, 4, 5]]);
+        s.write(7);
+        expect(s.outValues).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
+        expect(s2.outValues).toEqual([[0, 1, 2], [3, 4, 5]]);
+    });
+
     it('throttle', () => {
         let throttled = s.throttle(2);
         s.write(1, 2, 3, 4, 5, 6, 7);

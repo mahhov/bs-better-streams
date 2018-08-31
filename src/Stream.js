@@ -306,6 +306,16 @@ class Stream {
         }));
     }
 
+    batchFlat(count) {
+        let buffer = [];
+        return this.to(new Stream(function (value) {
+            if (buffer.push(value) >= count) {
+                this.write(buffer);
+                buffer = [];
+            }
+        }));
+    }
+
     generate(handler) {
         return this.to(new Stream(function (value, index) {
             let values = handler(value, index);
@@ -372,4 +382,4 @@ module.exports = Stream;
 // syntax for if / group by / throttled
 // product & filterCount & filterIndex to be more efficient
 // nest (opposite of flattenOn) (sibling of wrap)
-// wait [on] [ordered] to accept non promises
+// filterMap & split with binary+
