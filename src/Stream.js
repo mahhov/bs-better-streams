@@ -75,6 +75,19 @@ class Stream {
         }));
     }
 
+    branchMap(...handlers) {
+        let pairedHandlers = [];
+        while (handlers.length >= 2)
+            pairedHandlers.push(handlers.splice(0, 2));
+        if (handlers.length)
+            pairedHandlers.push([() => true, handlers[0]]);
+
+        return this.to(new Stream(function (value, index) {
+            let handlers = pairedHandlers.find(([predicate]) => predicate(value, index));
+            this.write(handlers ? handlers[1](value, index) : value);
+        }));
+    }
+
     unique() {
         return this.to(new Stream(function (value) {
             this.outValues.includes(value) || this.write(value);

@@ -100,6 +100,25 @@ describe('core', () => {
         expect(s2.outValues).toEqual([300, 0, 1, 304, 2, 307]);
     });
 
+    it('branchMap optional elseHandler', () => {
+        let s2 = s.branchMap(
+            a => a[0] === 'a', a => 'Apple ' + a,
+            a => a[0] === 'b', a => 'Banana ' + a);
+        s.write('at', 'bat', 'action', 'cat', 'aaa');
+        expect(s.outValues).toEqual(['at', 'bat', 'action', 'cat', 'aaa']);
+        expect(s2.outValues).toEqual(['Apple at', 'Banana bat', 'Apple action', 'cat', 'Apple aaa']);
+    });
+
+    it('branchMap optional elseHandler', () => {
+        let s2 = s.branchMap(
+            a => a[0] === 'a', a => 'Apple ' + a,
+            a => a[0] === 'b', a => 'Banana ' + a,
+            a => 'Other ' + a);
+        s.write('at', 'bat', 'action', 'cat', 'aaa');
+        expect(s.outValues).toEqual(['at', 'bat', 'action', 'cat', 'aaa']);
+        expect(s2.outValues).toEqual(['Apple at', 'Banana bat', 'Apple action', 'Other cat', 'Apple aaa']);
+    });
+
     it('unique', () => {
         let s2 = s.unique();
         s.write(1, 2, 3, 4, 2, 4, 3, 4, 5, 3, 1, 5, 6, 6);

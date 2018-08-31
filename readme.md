@@ -92,6 +92,27 @@ myStream.write(200, 0, 1, 201, 2, 202);
 // outStream.outValues equals [300, -0, -1, 301, -2, 302]
 ```
 
+### branchMap (...predicate and map handlers)
+
+```js
+let myStream = new Stream();
+let outStream = myStream.branchMap(
+    a => a[0] === 'a', a => 'Apple ' + a, // if item starts with 'a', prepend 'Apple'
+    a => a[0] === 'b', a => 'Banana ' + a); // if item starts with 'b', prepend 'Banana'
+myStream.write('at', 'bat', 'action', 'cat', 'aaa');
+// outStream.outValues equals ['Apple at', 'Banana bat', 'Apple action', 'cat', 'Apple aaa']
+```
+
+```js
+let myStream = new Stream();
+let outStream = myStream.branchMap(
+    a => a[0] === 'a', a => 'Apple ' + a, // if item starts with 'a', prepend 'Apple'
+    a => a[0] === 'b', a => 'Banana ' + a, // if item starts with 'b', prepend 'Banana'
+    a => 'Other ' + a); // else, prepend, 'Other'
+myStream.write('at', 'bat', 'action', 'cat', 'aaa');
+// outStream.outValues equals ['Apple at', 'Banana bat', 'Apple action', 'Other cat', 'Apple aaa']
+```
+
 ### unique ()
 
 ```js
