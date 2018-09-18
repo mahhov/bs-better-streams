@@ -112,6 +112,25 @@ describe('async', () => {
         done();
     });
 
+    it('get promise', (done) => {
+        let s2 = s.wait();
+        let promise1 = createPromise();
+        let promise2 = createPromise();
+        let promise3 = createPromise();
+        s.write(promise1);
+        s.write(promise2);
+        expect(s2.outValues.length).toEqual(0);
+        s.promise.then(resolve => {
+            expect(resolve).toEqual([1, 2]);
+            expect(s2.outValues).toEqual([2, 1]);
+            done();
+        });
+        s.write(promise3);
+        promise3.sresolve(3);
+        promise2.resolve(2);
+        promise1.resolve(1);
+    });
+
     let createPromise = () => {
         let resolve, reject;
         let promise = new Promise((resolv, rejec) => {

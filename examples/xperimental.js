@@ -1,19 +1,29 @@
 const Stream = require('../src/Stream');
 
+let makePromise = () => {
+    let res, rej;
+    let promise = new Promise((resolve, reject) => {
+        res = resolve;
+        rej = reject;
+    });
+    promise.resolve = res;
+    promise.reject = rej;
+    return promise;
+};
+
 let myStream = new Stream();
 
-let outStream = myStream.switchMap(a => a.type,
-    'animal', a => `i have a pet ${a.value}`,
-    'number', a => `u have ${a.value} pencils`,
-    'color', a => `his favorite color is ${a.value}`);
+let p1 = makePromise();
+let p2 = makePromise();
 
-myStream.write(
-    {type: 'animal', value: 'elephant'},
-    {type: 'animal', value: 'flamingo'},
-    {type: 'number', value: 51},
-    {type: 'number', value: 1235},
-    {type: 'color', value: 'blue'},
-    {type: 'color', value: 'pink'},
-    {type: 'star', value: 'sun'});
+myStream.write(p1);
+myStream.write(p2);
 
-console.log(outStream.outValues);
+let myStreamWaited = myStream.wait();
+
+p1.resolve(1);
+p2.resolve(2);
+
+myStream.promise.then(() => {
+    console.log(myStreamWaited.outValues);
+});

@@ -625,6 +625,15 @@ myStream.write(6, 7);
 
 Calling `throttled.unthrottle()` will allow all current and future values to pass through without throttling, and rendering `throttled.next()` unnecessary.
 
+### promise
+
+`myStream.promise` returns a promise that resolves when all already written values to the stream have resolved.
+
+```js
+myStream.write(promise1, promise2, promise3, promise4);
+myStream.promise.then(resolve1234 => process(resolve1234));
+```
+
 ### length
 
 `myStream.length`

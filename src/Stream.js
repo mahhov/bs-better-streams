@@ -396,6 +396,10 @@ class Stream {
         return {stream, next, nextOne, unthrottle}
     }
 
+    get promise() {
+        return Promise.all(this.outValues);
+    }
+
     get length() {
         return this.outValues.length;
     }
