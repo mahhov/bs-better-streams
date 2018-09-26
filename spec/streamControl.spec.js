@@ -92,7 +92,7 @@ describe('control', () => {
 
     it('productX', () => {
         let s2 = stream();
-        let s3 = s.productX(s2, ({id, id2}) => id + id2, ({id2, id3}) => id2 - id3, (left, {value}) => {
+        let s3 = s.productX(s2, (left, right) => left.id + left.id2 === right.id2 - right.id3, (left, {value}) => {
             left.rightValue = value;
             return left;
         });

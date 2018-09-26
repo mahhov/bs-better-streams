@@ -210,10 +210,10 @@ class Stream {
         }));
     }
 
-    productX(rightStream, leftIdHandler, rightIdHandler, productHandler) {
+    productX(rightStream, matchHandler, productHandler) {
         return this.to(new Stream(function (left) {
             rightStream
-                .filter(right => leftIdHandler(left) === rightIdHandler(right))
+                .filter(right => matchHandler(left, right))
                 .each(right => {
                     this.write(productHandler(left, right));
                 });

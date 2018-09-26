@@ -339,11 +339,13 @@ otherStream.write({otherId: 3, otherValue: 30});
 //                                 {myId: 2, myValue: 201, other: {otherId: 2, otherValue: 21}}]
 ```
 
-### productX (rightStream, leftStreamIdHandler, rightStreamIdHandler, handler)
+### productX (rightStream, matchHandler, handler)
 
 ```js
-myStream.productX(otherStream, ({myId}) => myId, ({otherId}) => otherId, (left, right) => {
+let productStream = myStream.productX(otherStream, (left, right) => left.myId === right.otherId, (left, right) => {
     left.paired = true;
+    right.paired = true;
+    return {sum: left.myValue + right.otherValue};
 });
 myStream.write({myId: 1, myValue: 100});
 myStream.write({myId: 2, myValue: 200});
@@ -354,6 +356,13 @@ otherStream.write({otherId: 3, otherValue: 30});
 // myStream.outValues equals [{myId: 1, myValue: 100},
 //                            {myId: 2, myValue: 200, paired: true},
 //                            {myId: 2, myValue: 201, paired: true}]
+// otherStream.outValues equals [{otherId: 2, otherValue: 20, paired: true},
+//                               {otherId: 2, otherValue: 21, paired: true},
+//                               {otherId: 3, otherValue: 30}]
+// productStream.outValues equals [{sum: 220},
+//                                 {sum: 221},
+//                                 {sum: 221},
+//                                 {sum: 222}]
 ```
 
 Note that while `product` modifies a copy of left stream's values, leaving left stream unmodified; `productX` passes in the original values of left stream, allowing left stream to be modified by the handler as seen in the example above.
