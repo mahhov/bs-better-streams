@@ -36,7 +36,8 @@ class Stream {
         promises.forEach(promise => {
             promise.then(value => {
                 this.write(value);
-            }).catch(() => {
+            }).catch(err => {
+                console.log('stream error', err);
             });
         });
         return this;
@@ -224,7 +225,8 @@ class Stream {
         return this.to(new Stream(function (value) {
             Promise.resolve(value).then(resolve => {
                 this.write(resolve);
-            }).catch(() => {
+            }).catch(err => {
+                console.log('stream error', err);
             });
         }));
     }
@@ -235,7 +237,8 @@ class Stream {
                 let waited = Object.assign({}, value);
                 waited[name] = resolve;
                 this.write(waited);
-            }).catch(() => {
+            }).catch(err => {
+                console.log('stream error', err);
             });
         }));
     }
@@ -246,7 +249,8 @@ class Stream {
             prevWrapPromise = prevWrapPromise.then(() =>
                 Promise.resolve(value).then(resolve => {
                     this.write(resolve);
-                }).catch(() => {
+                }).catch(err => {
+                    console.log('stream error', err);
                 }))
         }));
     }
@@ -259,7 +263,8 @@ class Stream {
                     let waited = Object.assign({}, value);
                     waited[name] = resolve;
                     this.write(waited);
-                }).catch(() => {
+                }).catch(err => {
+                    console.log('stream error', err);
                 }))
         }));
     }
