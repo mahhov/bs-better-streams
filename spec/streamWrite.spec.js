@@ -46,14 +46,23 @@ describe('write', () => {
         expect(s2).toEqual(s);
     });
 
-    it('promise', done => {
+    it('promise', async () => {
         let rejected = Promise.reject(15);
         let resolved = Promise.resolve(10);
         let s2 = s.writePromise(rejected, resolved);
-        s.each(value => {
-            expect(value).toEqual(10);
-            done();
-        });
+        await s.promise;
+        expect(s.outValues.length).toEqual(2);
+        expect(s.outValues).toContain(10);
+        expect(s.outValues).toContain({rejected: 15});
+        expect(s2).toEqual(s);
+    });
+
+    it('promiseSkipOnReject', async () => {
+        let rejected = Promise.reject(15);
+        let resolved = Promise.resolve(10);
+        let s2 = s.writePromiseSkipOnReject(rejected, resolved);
+        await s.promise;
+        expect(s.outValues).toEqual([10]);
         expect(s2).toEqual(s);
     });
 

@@ -36,8 +36,18 @@ class Stream {
         promises.forEach(promise => {
             promise.then(value => {
                 this.write(value);
-            }).catch(err => {
-                console.log('stream error', err);
+            }).catch(rejected => {
+                this.write({rejected});
+            });
+        });
+        return this;
+    }
+
+    writePromiseSkipOnReject(...promises) {
+        promises.forEach(promise => {
+            promise.then(value => {
+                this.write(value);
+            }).catch(rejected => {
             });
         });
         return this;
@@ -221,51 +231,64 @@ class Stream {
         }));
     }
 
-    wait() {
+    wait(skipOnReject) {
         return this.to(new Stream(function (value) {
             Promise.resolve(value).then(resolve => {
                 this.write(resolve);
-            }).catch(err => {
-                console.log('stream error', err);
+            }).catch(rejected => {
+                if (!skipOnReject)
+                    this.write({rejected});
             });
         }));
     }
 
-    waitOn(name) {
+    waitOn(name, skipOnReject) {
         return this.to(new Stream(function (value) {
-            Promise.resolve(value[name]).then(resolve => {
+            let onResolve = resolve => {
                 let waited = Object.assign({}, value);
                 waited[name] = resolve;
                 this.write(waited);
-            }).catch(err => {
-                console.log('stream error', err);
-            });
+            };
+
+            Promise.resolve(value[name])
+                .then(onResolve)
+                .catch(rejected => {
+                    if (!skipOnReject)
+                        onResolve({rejected});
+                });
         }));
     }
 
-    waitOrdered() {
+    waitOrdered(skipOnReject) {
         let prevWrapPromise = Promise.resolve();
         return this.to(new Stream(function (value) {
-            prevWrapPromise = prevWrapPromise.then(() =>
-                Promise.resolve(value).then(resolve => {
+            prevWrapPromise = prevWrapPromise
+                .then(() => value)
+                .then(resolve => {
                     this.write(resolve);
-                }).catch(err => {
-                    console.log('stream error', err);
-                }))
+                }).catch(rejected => {
+                    if (!skipOnReject)
+                        this.write({rejected});
+                });
         }));
     }
 
-    waitOnOrdered(name) {
+    waitOnOrdered(name, skipOnReject) {
         let prevWrapPromise = Promise.resolve();
         return this.to(new Stream(function (value) {
-            prevWrapPromise = prevWrapPromise.then(() =>
-                Promise.resolve(value[name]).then(resolve => {
-                    let waited = Object.assign({}, value);
-                    waited[name] = resolve;
-                    this.write(waited);
-                }).catch(err => {
-                    console.log('stream error', err);
-                }))
+            let onResolve = resolve => {
+                let waited = Object.assign({}, value);
+                waited[name] = resolve;
+                this.write(waited);
+            };
+
+            prevWrapPromise = prevWrapPromise
+                .then(() => value[name])
+                .then(onResolve)
+                .catch(rejected => {
+                    if (!skipOnReject)
+                        onResolve({rejected});
+                });
         }));
     }
 

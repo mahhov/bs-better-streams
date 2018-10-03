@@ -10,8 +10,9 @@ describe('async', () => {
         spy3 = jasmine.createSpy('spy3');
     });
 
-    it('wait', done => {
-        let s2 = s.wait();
+    it('wait', async () => {
+        let s2 = s.wait(true);
+        let s3 = s.wait();
         let promise1 = Promise.resolve(1);
         let promise2 = Promise.resolve(2);
         let promise3 = Promise.resolve(3);
@@ -21,15 +22,15 @@ describe('async', () => {
         s.write(2.5);
         s.write(promise3);
         s.write(promise4);
-        Promise.all([promise1, promise2, promise3]).then(() => {
-            expect(s.outValues).toEqual([promise1, promise2, 2.5, promise3, promise4]);
-            expect(s2.outValues).toEqual([1, 2, 2.5, 3]);
-            done();
-        });
+        await s.promise.catch(() => null);
+        expect(s.outValues).toEqual([promise1, promise2, 2.5, promise3, promise4]);
+        expect(s2.outValues).toEqual([1, 2, 2.5, 3]);
+        expect(s3.outValues).toEqual([1, 2, 2.5, 3, {rejected: 4}]);
     });
 
-    it('waitOn', done => {
-        let s2 = s.waitOn('key');
+    it('waitOn', async () => {
+        let s2 = s.waitOn('key', true);
+        let s3 = s.waitOn('key');
         let promise1 = Promise.resolve(1);
         let promise2 = Promise.resolve(2);
         let promise3 = Promise.resolve(3);
@@ -39,15 +40,15 @@ describe('async', () => {
         s.write({key: 2.5});
         s.write({key: promise3});
         s.write({key: promise4});
-        Promise.all([promise1, promise2, promise3]).then(() => {
-            expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: 2.5}, {key: promise3}, {key: promise4}]);
-            expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 2.5}, {key: 3}]);
-            done();
-        });
+        await s.promise;
+        expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: 2.5}, {key: promise3}, {key: promise4}]);
+        expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 2.5}, {key: 3}]);
+        expect(s3.outValues).toEqual([{key: 1}, {key: 2}, {key: 2.5}, {key: 3}, {key: {rejected: 4}}]);
     });
 
-    it('waitOrdered', async (done) => {
-        let s2 = s.waitOrdered();
+    it('waitOrdered', async () => {
+        let s2 = s.waitOrdered(true);
+        let s3 = s.waitOrdered();
         let promise1 = createPromise();
         let promise2 = createPromise();
         let promise3 = createPromise();
@@ -76,11 +77,12 @@ describe('async', () => {
         await promise6 && await sleep();
         expect(s.outValues).toEqual([promise1, promise2, promise3, promise4, 4.5, promise5, promise6, promise7, promise8]);
         expect(s2.outValues).toEqual([1, 2, 3, 4.5, 5, 6, 7, 8]);
-        done();
+        expect(s3.outValues).toEqual([1, 2, 3, {rejected: 4}, 4.5, 5, 6, 7, 8]);
     });
 
-    it('waitOnOrdered', async (done) => {
-        let s2 = s.waitOnOrdered('key');
+    it('waitOnOrdered', async () => {
+        let s2 = s.waitOnOrdered('key', true);
+        let s3 = s.waitOnOrdered('key');
         let promise1 = createPromise();
         let promise2 = createPromise();
         let promise3 = createPromise();
@@ -109,7 +111,7 @@ describe('async', () => {
         await promise6 && await sleep();
         expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: promise3}, {key: promise4}, {key: 4.5}, {key: promise5}, {key: promise6}, {key: promise7}, {key: promise8}]);
         expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: 4.5}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
-        done();
+        expect(s3.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: {rejected: 4}}, {key: 4.5}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
     });
 
     it('get promise', (done) => {
