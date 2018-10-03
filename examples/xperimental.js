@@ -14,18 +14,11 @@ let makePromise = () => {
 let myStream = new Stream();
 let otherStream = new Stream();
 
-let productStream = myStream.productX(otherStream, (left, right) => left.myId === right.otherId, (left, right) => {
-    left.paired = true;
-    right.paired = true;
-    return {sum: left.myValue + right.otherValue};
-});
-myStream.write({myId: 1, myValue: 100});
-myStream.write({myId: 2, myValue: 200});
-myStream.write({myId: 2, myValue: 201});
-otherStream.write({otherId: 2, otherValue: 20});
-otherStream.write({otherId: 2, otherValue: 21});
-otherStream.write({otherId: 3, otherValue: 30});
+myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
+myStream.write({key1: 'value2', key2: Promise.reject('rejectValue2')});
+let outStream = myStream.waitOn('key2', true);
+// outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
 
-console.log(myStream.outValues)
-console.log(otherStream.outValues)
-console.log(productStream.outValues)
+setTimeout(() =>
+        console.log(outStream.outValues)
+    , 100);

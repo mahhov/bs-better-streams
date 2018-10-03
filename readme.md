@@ -47,13 +47,22 @@ myStream.write(12, 22, 32);
 
 `myStream.write(...[10, 20, 30]);`
 
-### write promise (...promises)
+### writePromise (...promises)
+
+```js
+let promise1 = Promise.resolve('i hate `.then`s');
+let promise2 = Promise.reject('rejections r wrapped');
+myStream.writePromise(promise1, promise2);
+// myStream.outValues equals ['i hate `.then`s', {rejected: 'rejections r wrapped'}]
+```
+
+### writePromiseSkipOnReject (...promises)
 
 ```js
 let promise1 = Promise.resolve('i hate `.then`s');
 let promise2 = Promise.reject('rejections r ignored');
-myStream.writePromise(promise1, promise2);
-// myStream.outValues equals [10]
+myStream.writePromiseSkipOnReject(promise1, promise2);
+// myStream.outValues equals ['i hate `.then`s']
 ```
 
 ### each (handler)
@@ -376,26 +385,28 @@ outStream.write(3, 4);
 // outStream.outValues equals [1, 2, 3, 4]
 ```
 
-### wait ()
+### wait (skipOnReject)
 
 ```js
 myStream.write(Promise.resolve('stream'));
 myStream.write(Promise.resolve('async'));
 myStream.write(Promise.resolve('data'));
-myStream.write(Promise.reject('rejected'));
 let outStream = myStream.wait();
 myStream.write(Promise.resolve('without needing'));
 myStream.write(Promise.resolve('async/await'));
 myStream.write(Promise.resolve('or .then'));
-// outStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then']
+myStream.write(Promise.reject('rejected'));
+// outStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then',  {rejected: 'rejected'}]
 ```
 
-### waitOn (key)
+### waitOn (key, skipOnReject)
 
 ```js
 myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
+myStream.write({key1: 'value2', key2: Promise.reject('rejectValue2')});
 let outStream = myStream.waitOn('key2');
-// outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
+// outStream.outValues equals [{key1: 'value1', key2: 'value2'},
+//                             {key1: 'value2', key2: {rejected: 'rejectValue2'}}]
 ```
 
 #### Why is waitOn useful?
@@ -435,7 +446,7 @@ users
     .waitOn('shape');
 ```
 
-### waitOrdered ()
+### waitOrdered (skipOnReject)
 
 ```js
 let resolve1, resolve2;
@@ -448,7 +459,7 @@ resolve1('promise 1 resolved last');
 // outStream.outValues equals ['promise 1 resolved last', 'promise 2 resolved first']
 ```
 
-### waitOnOrdered (key)
+### waitOnOrdered (key, skipOnReject)
 
 ```js
 let resolve1, resolve2;
@@ -460,6 +471,19 @@ resolve2('promise 2 resolved first');
 resolve1('promise 1 resolved last');
 // outStream.outValues equals [{key: 'promise 1 resolved last', key: 'promise 2 resolved first'}]
 ```
+
+#### skipOnReject paramater
+
+passing `true` as the last paramater to `wait`, `waitOn`, `waitOrdered`, and `waitOnOrdered` will ignore values which are rejected, similar to `writePromiseSkipOnReject`
+
+```js
+myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
+myStream.write({key1: 'value2', key2: Promise.reject('rejectValue2')});
+let outStream = myStream.waitOn('key2', true);
+// outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
+```
+
+otherwise, rejected promises are wrapped in a `{rejected: rejected value}` structure and written just like resolved promises, similar to `writePromise`
 
 ### if (predicateHandler)
 
