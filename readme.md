@@ -53,7 +53,7 @@ myStream.write(12, 22, 32);
 let promise1 = Promise.resolve('i hate `.then`s');
 let promise2 = Promise.reject('rejections r wrapped');
 myStream.writePromise(promise1, promise2);
-// myStream.outValues equals ['i hate `.then`s', {rejected: 'rejections r wrapped'}]
+// myStream.outValues equals ['i hate `.then`s', {rejected: 'rejections r wrapped', isRejected: true}]
 ```
 
 ### writePromiseSkipOnReject (...promises)
@@ -396,7 +396,7 @@ myStream.write(Promise.resolve('without needing'));
 myStream.write(Promise.resolve('async/await'));
 myStream.write(Promise.resolve('or .then'));
 myStream.write(Promise.reject('rejected'));
-// outStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then',  {rejected: 'rejected'}]
+// outStream.outValues equals ['stream', 'async', 'data', 'without needing', 'async/await', 'or .then',  {rejected: 'rejected', isRejected: true}]
 ```
 
 ### waitOn (key, skipOnReject)
@@ -406,7 +406,7 @@ myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
 myStream.write({key1: 'value2', key2: Promise.reject('rejectValue2')});
 let outStream = myStream.waitOn('key2');
 // outStream.outValues equals [{key1: 'value1', key2: 'value2'},
-//                             {key1: 'value2', key2: {rejected: 'rejectValue2'}}]
+//                             {key1: 'value2', key2: {rejected: 'rejectValue2', isRejected: true}}]
 ```
 
 #### Why is waitOn useful?
@@ -483,7 +483,7 @@ let outStream = myStream.waitOn('key2', true);
 // outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
 ```
 
-otherwise, rejected promises are wrapped in a `{rejected: rejected value}` structure and written just like resolved promises, similar to `writePromise`
+otherwise, rejected promises are wrapped in a `{rejected: <rejected value>, isRejected: true}` structure and written just like resolved promises, similar to `writePromise`
 
 ### if (predicateHandler)
 

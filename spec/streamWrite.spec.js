@@ -53,7 +53,7 @@ describe('write', () => {
         await s.promise;
         expect(s.outValues.length).toEqual(2);
         expect(s.outValues).toContain(10);
-        expect(s.outValues).toContain({rejected: 15});
+        expect(s.outValues).toContain({rejected: 15, isRejected: true});
         expect(s2).toEqual(s);
     });
 

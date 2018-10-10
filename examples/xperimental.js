@@ -14,11 +14,13 @@ let makePromise = () => {
 let myStream = new Stream();
 let otherStream = new Stream();
 
-myStream.write({key1: 'value1', key2: Promise.resolve('value2')});
-myStream.write({key1: 'value2', key2: Promise.reject('rejectValue2')});
-let outStream = myStream.waitOn('key2', true);
-// outStream.outValues equals [{key1: 'value1', key2: 'value2'}]
+myStream.write(1, 2);
 
-setTimeout(() =>
-        console.log(outStream.outValues)
-    , 100);
+otherStream.write(1, 2);
+
+myStream.productX(otherStream, (a, b) => console.log(a, b), () => 0);
+
+myStream.write(3);
+otherStream.write(3);
+myStream.write(4);
+otherStream.write(4);

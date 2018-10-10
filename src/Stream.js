@@ -37,7 +37,7 @@ class Stream {
             promise.then(value => {
                 this.write(value);
             }).catch(rejected => {
-                this.write({rejected});
+                this.write(Stream.wrapRejected(rejected));
             });
         });
         return this;
@@ -51,6 +51,10 @@ class Stream {
             });
         });
         return this;
+    }
+
+    static wrapRejected(rejected) {
+        return {rejected, isRejected: true};
     }
 
     each(handler) {
@@ -237,7 +241,7 @@ class Stream {
                 this.write(resolve);
             }).catch(rejected => {
                 if (!skipOnReject)
-                    this.write({rejected});
+                    this.write(Stream.wrapRejected(rejected));
             });
         }));
     }
@@ -254,7 +258,7 @@ class Stream {
                 .then(onResolve)
                 .catch(rejected => {
                     if (!skipOnReject)
-                        onResolve({rejected});
+                        onResolve(Stream.wrapRejected(rejected));
                 });
         }));
     }
@@ -268,7 +272,7 @@ class Stream {
                     this.write(resolve);
                 }).catch(rejected => {
                     if (!skipOnReject)
-                        this.write({rejected});
+                        this.write(Stream.wrapRejected(rejected));
                 });
         }));
     }
@@ -287,7 +291,7 @@ class Stream {
                 .then(onResolve)
                 .catch(rejected => {
                     if (!skipOnReject)
-                        onResolve({rejected});
+                        onResolve(Stream.wrapRejected(rejected));
                 });
         }));
     }

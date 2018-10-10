@@ -25,7 +25,7 @@ describe('async', () => {
         await s.promise.catch(() => null);
         expect(s.outValues).toEqual([promise1, promise2, 2.5, promise3, promise4]);
         expect(s2.outValues).toEqual([1, 2, 2.5, 3]);
-        expect(s3.outValues).toEqual([1, 2, 2.5, 3, {rejected: 4}]);
+        expect(s3.outValues).toEqual([1, 2, 2.5, 3, {rejected: 4, isRejected: true}]);
     });
 
     it('waitOn', async () => {
@@ -43,7 +43,7 @@ describe('async', () => {
         await s.promise;
         expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: 2.5}, {key: promise3}, {key: promise4}]);
         expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 2.5}, {key: 3}]);
-        expect(s3.outValues).toEqual([{key: 1}, {key: 2}, {key: 2.5}, {key: 3}, {key: {rejected: 4}}]);
+        expect(s3.outValues).toEqual([{key: 1}, {key: 2}, {key: 2.5}, {key: 3}, {key: {rejected: 4, isRejected: true}}]);
     });
 
     it('waitOrdered', async () => {
@@ -77,7 +77,7 @@ describe('async', () => {
         await promise6 && await sleep();
         expect(s.outValues).toEqual([promise1, promise2, promise3, promise4, 4.5, promise5, promise6, promise7, promise8]);
         expect(s2.outValues).toEqual([1, 2, 3, 4.5, 5, 6, 7, 8]);
-        expect(s3.outValues).toEqual([1, 2, 3, {rejected: 4}, 4.5, 5, 6, 7, 8]);
+        expect(s3.outValues).toEqual([1, 2, 3, {rejected: 4, isRejected: true}, 4.5, 5, 6, 7, 8]);
     });
 
     it('waitOnOrdered', async () => {
@@ -111,7 +111,7 @@ describe('async', () => {
         await promise6 && await sleep();
         expect(s.outValues).toEqual([{key: promise1}, {key: promise2}, {key: promise3}, {key: promise4}, {key: 4.5}, {key: promise5}, {key: promise6}, {key: promise7}, {key: promise8}]);
         expect(s2.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: 4.5}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
-        expect(s3.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: {rejected: 4}}, {key: 4.5}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
+        expect(s3.outValues).toEqual([{key: 1}, {key: 2}, {key: 3}, {key: {rejected: 4, isRejected: true}}, {key: 4.5}, {key: 5}, {key: 6}, {key: 7}, {key: 8}]);
     });
 
     it('get promise', (done) => {
