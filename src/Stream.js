@@ -84,6 +84,13 @@ class Stream {
         return this.filter((value, index) => indexes.includes(index));
     }
 
+    filterEach(handler, trueHandler, falseHandler = a => a) {
+        return this.to(new Stream(function (value, index) {
+            (handler(value, index) ? trueHandler : falseHandler)(value, index);
+            this.write(value);
+        }));
+    }
+
     filterMap(handler, trueHandler, falseHandler = a => a) {
         return this.to(new Stream(function (value, index) {
             this.write((handler(value, index) ? trueHandler : falseHandler)(value, index));

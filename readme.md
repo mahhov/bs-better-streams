@@ -93,6 +93,12 @@ myStream.write('first', 'second', 'third', 'fourth', 'fifth');
 // outStream.outValues equals [first, third, fourth]
 ```
 
+### filterEach (predicateHandler, truePredicateHandler, falsePredicateHandler)
+
+```js
+let outStream = myStream.filterEach(value => value > 100, handleLargeNumbers, handleSmallNumbers);
+```
+
 ### filterMap (predicateHandler, truePredicateHandler, falsePredicateHandler)
 
 ```js

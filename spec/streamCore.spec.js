@@ -86,6 +86,21 @@ describe('core', () => {
         expect(s2.outValues).toEqual([11, 12]);
     });
 
+    it('filterEach', () => {
+        let s2 = s.filterEach(value => value > 100, spy1, spy2);
+        s.write(200, 0, 1, 201, 2, 202);
+        expect(spy1).toHaveBeenCalledTimes(3);
+        expect(spy1).toHaveBeenCalledWith(200, 0);
+        expect(spy1).toHaveBeenCalledWith(201, 3);
+        expect(spy1).toHaveBeenCalledWith(202, 5);
+        expect(spy2).toHaveBeenCalledTimes(3);
+        expect(spy2).toHaveBeenCalledWith(0, 1);
+        expect(spy2).toHaveBeenCalledWith(1, 2);
+        expect(spy2).toHaveBeenCalledWith(2, 4);
+        expect(s.outValues).toEqual([200, 0, 1, 201, 2, 202]);
+        expect(s2.outValues).toEqual([200, 0, 1, 201, 2, 202]);
+    });
+
     it('filterMap', () => {
         let s2 = s.filterMap(value => value > 100, (a, i) => a + 100 + i, (a, i) => -a - i);
         s.write(200, 0, 1, 201, 2, 202);
