@@ -41,11 +41,15 @@ myStream.write(12, 22, 32);
 
 ### write (...values)
 
-`myStream.write(10, 20, 30);`
+```js
+myStream.write(10, 20, 30);
+```
 
 ### write array (...[array of values])
 
-`myStream.write(...[10, 20, 30]);`
+```js
+myStream.write(...[10, 20, 30]);
+```
 
 ### writePromise (...promises)
 
@@ -67,15 +71,21 @@ myStream.writePromiseSkipOnReject(promise1, promise2);
 
 ### each (handler)
 
-`myStream.each( (value, index) => doOperation(value, index) );`
+```js
+myStream.each( (value, index) => doOperation(value, index) );
+```
 
 ### map (handler)
 
-`myStream.map( (value, index) => value * index );`
+```js
+myStream.map( (value, index) => value * index );
+```
 
 ### filter (predicateHandler)
 
-`myStream.filter( (value, index) => value > index );`
+```js
+myStream.filter( (value, index) => value > index );
+```
 
 ### filterCount (integer)
 
