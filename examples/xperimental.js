@@ -11,16 +11,13 @@ let makePromise = () => {
     return promise;
 };
 
-let myStream = new Stream();
-let otherStream = new Stream();
+myStream = new Stream()
+myStream.write(1, 2, 3);
+let oneToThree = myStream.map(a => a);
+myStream.disconnect();
+myStream.write(4, 5, 6);
+let oneToSix = myStream.map(a => a);
 
-myStream.write(1, 2);
-
-otherStream.write(1, 2);
-
-myStream.productX(otherStream, (a, b) => console.log(a, b), () => 0);
-
-myStream.write(3);
-otherStream.write(3);
-myStream.write(4);
-otherStream.write(4);
+console.log(myStream.outValues)
+console.log(oneToSix.outValues)
+console.log(oneToThree.outValues)

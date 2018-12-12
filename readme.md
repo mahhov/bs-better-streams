@@ -29,7 +29,7 @@ myStream
 
 ### accumulation
 
-you can use streams before and after you have began writing to them
+you can use streams before and after you have began writing to them. See [.clean()](#clean).
 
 ```js
 let myStream = stream();
@@ -673,6 +673,27 @@ myStream.write(6, 7);
 ```
 
 Calling `throttled.unthrottle()` will allow all current and future values to pass through without throttling, and rendering `throttled.next()` unnecessary.
+
+### clean()
+
+```js
+myStream.write(1, 2, 3);
+let oneToSix = myStream.map(a => a);
+myStream.clean();
+myStream.write(4, 5, 6);
+let fourToFive = myStream.map(a => a);
+// myStream.outValues equals [4, 5, 6];
+``` 
+
+### disconnect()
+
+```js
+myStream.write(1, 2, 3);
+let oneToThree = myStream.map(a => a);
+myStream.disconnect();
+myStream.write(4, 5, 6);
+let oneToSix = myStream.map(a => a);
+```
 
 ### promise
 

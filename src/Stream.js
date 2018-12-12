@@ -24,6 +24,14 @@ class Stream {
         });
     }
 
+    clean() {
+        this.outValues = [];
+    }
+
+    disconnect() {
+        this.next = [];
+    }
+
     write(...outValue) {
         this.next.forEach(nextStream => {
             nextStream.absorb(...outValue);
