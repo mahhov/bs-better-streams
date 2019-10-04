@@ -44,7 +44,7 @@ class Stream {
         promises.forEach(promise => {
             promise.then(value => {
                 this.write(value);
-            }).catch(rejected => {
+            }, rejected => {
                 this.write(Stream.wrapRejected(rejected));
             });
         });
@@ -55,7 +55,7 @@ class Stream {
         promises.forEach(promise => {
             promise.then(value => {
                 this.write(value);
-            }).catch(rejected => {
+            }, rejected => {
             });
         });
         return this;
@@ -254,7 +254,7 @@ class Stream {
         return this.to(new Stream(function (value) {
             Promise.resolve(value).then(resolve => {
                 this.write(resolve);
-            }).catch(rejected => {
+            }, rejected => {
                 if (!skipOnReject)
                     this.write(Stream.wrapRejected(rejected));
             });
@@ -270,8 +270,7 @@ class Stream {
             };
 
             Promise.resolve(value[name])
-                .then(onResolve)
-                .catch(rejected => {
+                .then(onResolve, rejected => {
                     if (!skipOnReject)
                         onResolve(Stream.wrapRejected(rejected));
                 });
@@ -285,9 +284,11 @@ class Stream {
                 .then(() => value)
                 .then(resolve => {
                     this.write(resolve);
-                }).catch(rejected => {
+                }, rejected => {
                     if (!skipOnReject)
                         this.write(Stream.wrapRejected(rejected));
+                })
+                .catch(rejected => {
                 });
         }));
     }
@@ -303,10 +304,11 @@ class Stream {
 
             prevWrapPromise = prevWrapPromise
                 .then(() => value[name])
-                .then(onResolve)
-                .catch(rejected => {
+                .then(onResolve, rejected => {
                     if (!skipOnReject)
                         onResolve(Stream.wrapRejected(rejected));
+                })
+                .catch(rejected => {
                 });
         }));
     }

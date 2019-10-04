@@ -11,13 +11,24 @@ let makePromise = () => {
     return promise;
 };
 
-myStream = new Stream()
-myStream.write(1, 2, 3);
-let oneToThree = myStream.map(a => a);
-myStream.disconnect();
-myStream.write(4, 5, 6);
-let oneToSix = myStream.map(a => a);
+let p = makePromise();
 
-console.log(myStream.outValues)
-console.log(oneToSix.outValues)
-console.log(oneToThree.outValues)
+p.then(() => {
+    throw 'e'
+}).catch(() => console.log('ERROR'));
+
+p.resolve(10);
+
+// let main = async () => {
+//     s = new Stream();
+//     s.writePromise(Promise.resolve(3));
+//     s.each((a, i) => console.log('x', i, a)); // remove
+//
+//     s.each(() => {
+//         throw 'error';
+//     });
+//     // console.log('await', await s.promise);
+//     // console.log('outvalues', s.outValues); // remove
+// };
+//
+// main();

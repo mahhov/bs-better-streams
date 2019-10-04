@@ -57,6 +57,18 @@ describe('write', () => {
         expect(s2).toEqual(s);
     });
 
+    it('promise catch', async () => {
+        s.writePromise(Promise.resolve(3), Promise.reject(4));
+        let s2 = s.each(() => null);
+        s.each(() => {
+            throw 'expected error';
+        });
+        await s2.promise;
+        expect(s2.outValues.length).toEqual(2);
+        expect(s2.outValues).toContain(3);
+        expect(s2.outValues).toContain({rejected: 4, isRejected: true});
+    });
+
     it('promiseSkipOnReject', async () => {
         let rejected = Promise.reject(15);
         let resolved = Promise.resolve(10);
