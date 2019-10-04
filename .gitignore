@@ -1,4 +1,3 @@
 .idea/*
-!.idea/runConfigurations/
 bs-better-streams.iml
 node_modules

@@ -1,5 +1,0 @@
-<component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Xperimental" type="NodeJSConfigurationType" factoryName="Node.js" path-to-node="project" node-parameters="examples/xperimental.js" working-dir="$PROJECT_DIR$">
-    <method />
-  </configuration>
-</component>
