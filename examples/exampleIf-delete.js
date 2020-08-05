@@ -1,4 +1,4 @@
-const stream = require('../src/index');
+const Stream = require('../src/index');
 
 let dog = {
     size: 3,

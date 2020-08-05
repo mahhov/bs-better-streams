@@ -1,17 +1,17 @@
-const stream = require('../src/index.js');
+const Stream = require('../src/index.js');
 
 describe('control', () => {
     let s, spy1, spy2, spy3;
 
     beforeEach(() => {
-        s = stream();
+        s = new Stream();
         spy1 = jasmine.createSpy('spy1');
         spy2 = jasmine.createSpy('spy2');
         spy3 = jasmine.createSpy('spy3');
     });
 
     it('to', () => {
-        let s2 = stream();
+        let s2 = new Stream();
         s.write(10);
         s.write(11);
         s2.write(12);
@@ -26,12 +26,12 @@ describe('control', () => {
     });
 
     it('join', () => {
-        let s2 = stream();
+        let s2 = new Stream();
         s.write(10);
         s.write(11);
         s2.write(12);
         s2.write(13);
-        let s3 = stream();
+        let s3 = new Stream();
         let s4 = s.join(s2, s3);
         s.write(14);
         s.write(15);
@@ -46,16 +46,16 @@ describe('control', () => {
     });
 
     it('joinCollapse', () => {
-        let s1 = stream().write(1, 2, 3, 4);
-        let s2 = stream().write(21, 22, 23, 24);
-        let s3 = stream().write(31, 32, 33, 34);
+        let s1 = new Stream().write(1, 2, 3, 4);
+        let s2 = new Stream().write(21, 22, 23, 24);
+        let s3 = new Stream().write(31, 32, 33, 34);
         let sJoint = s.write(s1, s2, s3).joinCollapse();
         expect(s.outValues).toEqual([s1, s2, s3]);
         expect(sJoint.outValues).toEqual([1, 2, 3, 4, 21, 22, 23, 24, 31, 32, 33, 34]);
     });
 
     it('product', () => {
-        let s2 = stream();
+        let s2 = new Stream();
         let s3 = s.product(s2, 'id', 'id2', 'match');
         s.write({id: 1, value: 100});
         s.write({id: 2, value: 200});
@@ -104,7 +104,7 @@ describe('control', () => {
     });
 
     it('productX', () => {
-        let s2 = stream();
+        let s2 = new Stream();
         let s3 = s.productX(s2, (left, right) => left.id + left.id2 === right.id2 - right.id3, (left, {value}) => {
             left.rightValue = value;
             return left;

@@ -4,10 +4,10 @@
 
 `npm i -save bs-better-stream`
 
-`const stream = require('bs-better-stream');`
+`const Stream = require('bs-better-stream');`
 
 ```js
-let myStream = stream();
+let myStream = new Stream();
 myStream.write(10, 20, 30);
 myStream.each(console.log);
 myStream.write(11, 21, 31);
@@ -32,7 +32,7 @@ myStream
 you can use streams before and after you have began writing to them. See [.clean()](#clean).
 
 ```js
-let myStream = stream();
+let myStream = new Stream();
 myStream.write(11, 21, 31);
 myStream.each(console.log);
 myStream.write(12, 22, 32);

@@ -1,10 +1,10 @@
-const stream = require('../src/index.js');
+const Stream = require('../src/index.js');
 
 describe('grow', () => {
     let s, spy1, spy2, spy3;
 
     beforeEach(() => {
-        s = stream();
+        s = new Stream();
         spy1 = jasmine.createSpy('spy1');
         spy2 = jasmine.createSpy('spy2');
         spy3 = jasmine.createSpy('spy3');

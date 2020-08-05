@@ -1,8 +1,8 @@
-const stream = require('../src/index.js');
+const Stream = require('../src/index.js');
 
 describe('object', () => {
     it('clean', () => {
-        let s = stream();
+        let s = new Stream();
         let s2 = s.map(a => a);
         s.write(1, 2, 3, 4);
         s.clean();
@@ -15,7 +15,7 @@ describe('object', () => {
     });
 
     it('disconnect', () => {
-        let s = stream();
+        let s = new Stream();
         let s2 = s.map(a => a);
         s.write(1, 2, 3, 4);
         s.disconnect();

@@ -1,5 +1,9 @@
-const Stream = require('./Stream');
+const Stream_ = require('./Stream');
 
-let stream = () => new Stream();
+class Stream extends Stream_ {
+    constructor() {
+        super();
+    }
+}
 
-module.exports = stream;
+module.exports = Stream;
