@@ -7,10 +7,10 @@ class Stream {
     }
 
     to(stream) {
-        this.next.push(stream);
         this.outValues.forEach(value => {
             stream.absorb(value);
         });
+        this.next.push(stream);
         return stream
     }
 
@@ -33,10 +33,10 @@ class Stream {
     }
 
     write(...outValue) {
+        this.outValues.push(...outValue);
         this.next.forEach(nextStream => {
             nextStream.absorb(...outValue);
         });
-        this.outValues.push(...outValue);
         return this;
     }
 
