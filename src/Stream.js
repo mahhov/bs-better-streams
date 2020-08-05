@@ -224,8 +224,17 @@ class Stream {
         }));
     }
 
-    join(stream) {
-        return stream.to(this.to(new Stream()));
+    join(...streams) {
+        let joint = new Stream();
+        this.to(joint);
+        streams.forEach(stream => stream.to(joint));
+        return joint;
+    }
+
+    joinCollapse() {
+        let joint = new Stream();
+        this.each(stream => stream.to(joint));
+        return joint;
     }
 
     product(stream, leftId, rightId, name) {

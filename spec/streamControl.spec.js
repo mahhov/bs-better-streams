@@ -31,14 +31,27 @@ describe('control', () => {
         s.write(11);
         s2.write(12);
         s2.write(13);
-        let s3 = s.join(s2);
+        let s3 = stream();
+        let s4 = s.join(s2, s3);
         s.write(14);
         s.write(15);
         s2.write(16);
         s2.write(17);
+        s3.write(18);
+        s3.write(19);
         expect(s.outValues).toEqual([10, 11, 14, 15]);
         expect(s2.outValues).toEqual([12, 13, 16, 17]);
-        expect(s3.outValues).toEqual([10, 11, 12, 13, 14, 15, 16, 17]);
+        expect(s3.outValues).toEqual([18, 19]);
+        expect(s4.outValues).toEqual([10, 11, 12, 13, 14, 15, 16, 17, 18, 19]);
+    });
+
+    it('joinCollapse', () => {
+        let s1 = stream().write(1, 2, 3, 4);
+        let s2 = stream().write(21, 22, 23, 24);
+        let s3 = stream().write(31, 32, 33, 34);
+        let sJoint = s.write(s1, s2, s3).joinCollapse();
+        expect(s.outValues).toEqual([s1, s2, s3]);
+        expect(sJoint.outValues).toEqual([1, 2, 3, 4, 21, 22, 23, 24, 31, 32, 33, 34]);
     });
 
     it('product', () => {

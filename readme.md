@@ -338,14 +338,25 @@ animalSpecies
     .flattenOn('names', 'name');
 ```
 
-### join (stream)
+### join (...streams)
 
 ```js
-let outStream = myStream.join(otherStream);
+let outStream = myStream.join(stream1, stream2);
 myStream.write(1, 2);
-otherStream.write(3, 4);
-myStream.write(5, 6);
+stream1.write(3, 4);
+stream2.write(5, 6);
 // outStream.outValues equals [1, 2, 3, 4, 5, 6]
+```
+
+### joinCollapse ()
+
+```js
+myStream.write(stream1, stream2, stream3);
+outStream = myStream.joinCollapse();
+stream1.write(1.0, 1.1, 1.2);
+stream2.write(2.0, 2.1, 2.2);
+stream3.write(3.0, 3.1, 3.2);
+// outStream.outValues equals [1.0, 1.1, 1.2, 2.0, 2.1, 2.2, 3.0, 3.1, 3.2]
 ```
 
 ### product (rightStream, leftStreamIdKey, rightStreamIdKey, leftStreamSetKey)
